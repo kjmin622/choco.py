@@ -23,7 +23,7 @@ PLAYER_COLACCELERATE = 0.2
 PLAYER_NAME1 = "냥이1"
 PLAYER_NAME2 = "냥이2"
 
-TESTMODE = True
+TESTMODE = False
 
 MAPLIST = MAPDATA
 MAPDOCUMANT = {
@@ -305,7 +305,7 @@ class ScriptEvent:
         if(self.scriptText.display==False and (collision_object(p1, self.rect) or collision_object(p2, self.rect))):
             self.scriptText.switchdisplay()
             return True
-
+        # 접촉해제
         if(self.scriptText.display==True and not(collision_object(p1, self.rect) or collision_object(p2, self.rect))):
             self.scriptText.switchdisplay()
             return False

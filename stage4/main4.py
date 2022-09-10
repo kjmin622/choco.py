@@ -37,7 +37,8 @@ player_spawn_x, player_spawn_y = MAPDOCUMANT["spawn"]
 mapImage = mapManager.createMapImage()
 
 #test
-player_spawn_x, player_spawn_y = (101,465)
+if(TESTMODE):
+    player_spawn_x, player_spawn_y = (101,465)
 
 # event list
 eventList = []
@@ -168,7 +169,8 @@ camera_scroll_standard = 1
 
 while True:
     screen_scaled.fill(BACKGROUND_COLOR)
-    print(player_rect.x//8, player_rect.y//8+1)
+    if(TESTMODE):
+        print(player_rect.x//8, player_rect.y//8+1)
     
     if(camera_scroll_standard == 1):
         camera_scroll[0] += int((player_rect.x - camera_scroll[0] - WINDOW_SIZE[0] / 8 - 5) / 16)       # 카메라 이동
