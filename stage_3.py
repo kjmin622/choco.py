@@ -1,6 +1,7 @@
 import pygame
 import random
 import sys
+import os
 
 pygame.init()
 
@@ -8,13 +9,16 @@ screen_width = 1024
 screen_height = 768
 screen = pygame.display.set_mode((screen_width, screen_height))
 
+DIR_PATH = os.path.dirname(__file__)
+DIR_IMAGE = os.path.join(DIR_PATH, 'image')
+
 game_font = pygame.font.Font(None,40)
 
 pygame.display.set_caption("ChoCo")
 
-background = pygame.image.load("C:/Users/김기태/Desktop/donggggas/choco.py/image/floor.png")   
+background = pygame.image.load(os.path.join(DIR_IMAGE,'floor.png')).convert()
 
-character = pygame.image.load("C:/Users/김기태/Desktop/donggggas/choco.py/image/character_1.png")
+character = pygame.image.load(os.path.join(DIR_IMAGE,'character_1.png')).convert()
 character_size = character.get_rect().size
 character_width = character_size[0]
 character_height = character_size[1]
@@ -23,7 +27,7 @@ character_y_pos = screen_height - character_height
 
 dogs = []
 for _ in range(4):
-    dog = pygame.image.load("C:/Users/김기태/Desktop/donggggas/choco.py/image/dog.png")
+    dog = pygame.image.load(os.path.join(DIR_IMAGE,'dog.png')).convert()
     dog_size = dog.get_rect().size
     dog_width = dog_size[0]
     dog_height = dog_size[1]
@@ -31,7 +35,7 @@ for _ in range(4):
     dog_y_pos = random.randint(0,screen_height)
     dogs.append([dog,dog_width,dog_height,dog_x_pos,dog_y_pos])
     
-portal = pygame.image.load("C:/Users/김기태/Desktop/donggggas/choco.py/image/portal.png")
+portal = pygame.image.load(os.path.join(DIR_IMAGE,'portal.png')).convert()
 portal_size = portal.get_rect().size
 portal_width = portal_size[0]
 portal_height = portal_size[1]
@@ -40,7 +44,7 @@ portal_y_pos = 0
 
 buttons = []
 for i in range(10):
-    button = pygame.image.load("C:/Users/김기태/Desktop/donggggas/choco.py/image/button.png")
+    button = pygame.image.load(os.path.join(DIR_IMAGE,'button.png')).convert()
     button_size = button.get_rect().size
     button_width = button_size[0]
     button_height = button_size[1]
@@ -50,7 +54,7 @@ for i in range(10):
 
 lights = []
 for i in range(5):
-    light = pygame.image.load("C:/Users/김기태/Desktop/donggggas/choco.py/image/light.png")
+    light = pygame.image.load(os.path.join(DIR_IMAGE,'light.png')).convert()
     light_size = light.get_rect().size
     light_width = light_size[0]
     light_height = light_size[1]
@@ -81,7 +85,7 @@ total_time = 5
 
 def button_reset(num):
     for i in range(num):
-        lights[i][0] = pygame.image.load("C:/Users/김기태/Desktop/donggggas/choco.py/image/light_clear.png")
+        lights[i][0] = pygame.image.load(os.path.join(DIR_IMAGE,'light_clear.png')).convert()
     for button in buttons:
             screen.blit(button[0],(button[3],button[4]))
     for light in lights:
@@ -92,13 +96,13 @@ def button_reset(num):
 def show_password(num):
     for now in password[:num+1]:
         pygame.time.delay(200)
-        buttons[now][0] = pygame.image.load("C:/Users/김기태/Desktop/donggggas/choco.py/image/button_press.png")
+        buttons[now][0] = pygame.image.load(os.path.join(DIR_IMAGE,'button_press.png')).convert()
         screen.blit(buttons[now][0],(buttons[now][3],buttons[now][4]))
         pygame.display.update()
         pygame.time.delay(200)
 
     for now in password[:num+1]:
-        buttons[now][0] = pygame.image.load("C:/Users/김기태/Desktop/donggggas/choco.py/image/button.png")
+        buttons[now][0] = pygame.image.load(os.path.join(DIR_IMAGE,'button.png')).convert()
         screen.blit(buttons[now][0],(buttons[now][3],buttons[now][4]))
         pygame.display.update()
     
@@ -169,7 +173,7 @@ while running:
                 gameover = True
         
         if character_rect.colliderect(portal_rect):
-            background = pygame.image.load("C:/Users/김기태/Desktop/donggggas/choco.py/image/next.png")
+            background = pygame.image.load(os.path.join(DIR_IMAGE,'next.png')).convert()
             dogs = []
             enter = True
         screen.blit(character,(character_x_pos,character_y_pos))
