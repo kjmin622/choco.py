@@ -4,6 +4,7 @@ from funcs import *
 from pygame.locals import *
 import pygame.mixer
 
+import time
 
 
 pygame.init()
@@ -37,6 +38,10 @@ mapManager = Map(screen_scaled, spriteSheet_ground)
 # 최초 스폰 위치
 player_spawn_x, player_spawn_y = MAPDOCUMANT["spawn"]
 mapImage = mapManager.createMapImage()
+
+## test
+if(TESTMODE):
+    player_spawn_x, player_spawn_y = TESTSPAWN
 
 # event list
 eventList = []
@@ -125,6 +130,71 @@ button_Ground_List = [
     (112,465,166,434,False),
     (112,465,167,434,False),
 
+    #스위치 점프맵2
+    (168,433,129,465,False),
+    (168,433,133,462,False),
+    (168,433,133,461,False),
+    (168,433,133,460,False),
+    (168,433,133,459,False),
+    (168,433,133,458,False),
+    (168,433,137,465,False),
+    (168,433,141,462,False),
+    (168,433,141,461,False),
+    (168,433,141,460,False),
+    (168,433,141,459,False),
+    (168,433,141,458,False),
+    (168,433,145,465,False),
+    (168,433,149,462,False),
+    (168,433,149,461,False),
+    (168,433,149,460,False),
+    (168,433,149,459,False),
+    (168,433,149,458,False),
+    (168,433,153,465,False),
+    (168,433,157,462,False),
+    (168,433,157,461,False),
+    (168,433,157,460,False),
+    (168,433,157,459,False),
+    (168,433,157,458,False),
+    (168,433,161,465,False),
+    (168,433,166,463,False),
+    (168,433,166,461,False),
+    (168,433,166,459,False),
+    (168,433,166,457,False),
+    (168,433,166,455,False),
+    (168,433,166,453,False),
+    (168,433,166,451,False),
+    (168,433,166,449,False),
+
+    #내려보내기
+    (167,447,162,448,True),
+    #스위치 점프맵3
+    (171,433,122,444,False),
+    (173,433,126,442,False),
+    (171,433,130,442,False),
+    (173,433,133,439,False),
+    (171,433,138,438,False),
+    (173,433,142,437,False),
+    (171,433,139,432,False),
+    (173,433,131,433,False),
+    (171,433,131,429,False),
+    (173,433,131,425,False),
+    (171,433,131,421,False),
+    (173,433,131,417,False),
+    (171,433,137,420,False),
+    (173,433,145,425,False),
+    (171,433,155,434,False),
+    (173,433,156,434,False),
+    (171,433,157,434,False),
+    (173,433,158,434,False),
+    (171,433,159,434,False),
+    (173,433,160,434,False),
+    (171,433,161,434,False),
+    (173,433,162,434,False),
+    (171,433,163,434,False),
+    (173,433,164,434,False),
+    (171,433,165,434,False),
+    (173,433,166,434,False),
+    (171,433,167,434,False),
 
 ]
 
@@ -132,18 +202,17 @@ script_text_List = [
     (40,467,f"{PLAYER_NAME2}는 방향키로 움직일 수 있다."),
     (43,467,"Q를 누르면 시점이 바뀌니 거리가 멀어지면 활용하자"),
     (53,453,"공중에 있는 친구 머리를 밟고 뛰면... 높게는 뛰겠지만 기분은 나쁠지도"),
-    (99,465,"이게 엘레베이터라고? 낑겨 죽는거 아니야?")
+    (99,465,"이게 엘레베이터라고? 낑겨 죽는거 아니야?"),
+    (166,447,"다시 내려가는 문인가?")
 
 ]
 
 # event func
 ## button_ground
 for event in button_Ground_List:
-    eventfunc = FuncSetGround(mapManager, event[2], event[3])
-    if(not event[4]):
-        eventList.append(Button(pygame.Rect((event[0]*TILE_SIZE, event[1]*TILE_SIZE), (8,8)), spriteSheet_object, eventfunc.appendfunc, eventfunc.removefunc))
-    else:
-        eventList.append(Button(pygame.Rect((event[0]*TILE_SIZE, event[1]*TILE_SIZE), (8,8)), spriteSheet_object, eventfunc.removefunc, eventfunc.appendfunc))
+    eventfunc = FuncSetGround(mapManager, event[2], event[3], event[4])
+    eventList.append(Button(pygame.Rect((event[0]*TILE_SIZE, event[1]*TILE_SIZE), (8,8)), spriteSheet_object, eventfunc))
+
 ## script event
 for event in script_text_List:
     eventfunc = ScriptEvent(pygame.Rect((event[0]*TILE_SIZE, event[1]*TILE_SIZE),(8,8)), spriteSheet_object, event[2])
@@ -196,14 +265,8 @@ player2_walkSoundTimer = 0
 camera_scroll_standard = 1
 
 
-## test
-if(TESTMODE):
-    player_spawn_x, player_spawn_y = (101,465)
-
 while True:
     screen_scaled.fill(BACKGROUND_COLOR)
-    if(TESTMODE):
-        print(player_rect.x//8, player_rect.y//8+1)
     
     if(camera_scroll_standard == 1):
         camera_scroll[0] += int((player_rect.x - camera_scroll[0] - WINDOW_SIZE[0] / 8 - 5) / 16)       # 카메라 이동
@@ -325,16 +388,21 @@ while True:
     #screen_scaled.blit(mapImage_front, (-camera_scroll[0], -camera_scroll[1]))
 
     # 이벤트 관리
-    eventFlag = False
+    eventGroundList = []
     for event in eventList:        
         nowFlag = event.perceive(player_rect, player2_rect)
         if(nowFlag):
-            eventFlag = True
             eventImage = event.eventImage(eventImage)
+            if(event.change_map != None):
+                eventGroundList.append(event.change_map)
     eventImage.set_colorkey((0,0,0))
+    s = time.time()
+    if len(eventGroundList) > 0:
+        eventImage.blit(mapManager.create_map_image_by_list(eventGroundList), (0,0))
+    t = time.time()-s
+    if(t>0.01):
+        print(t)
     screen_scaled.blit(eventImage,(-camera_scroll[0], -camera_scroll[1]))
-    if(eventFlag):
-        mapImage = mapManager.createMapImage()
 
     # 키 입력
     for event in pygame.event.get():
@@ -383,6 +451,25 @@ while True:
                 keyLeft2 = False
             if event.key == K_RIGHT:
                 keyRight2 = False
+
+        if TESTMODE :
+            if event.type == KEYDOWN:
+                if(event.key == K_F3):
+                    if(camera_scroll_standard==1):
+                        print("player:",player_rect.x//8, player_rect.y//8+1)
+                    else:
+                        print("player:",player2_rect.x//8, player2_rect.y//8+1)
+                if(event.key == K_F4):
+                    print("mouse:",(camera_scroll[0]+pygame.mouse.get_pos()[0]//4)//8,(camera_scroll[1]+pygame.mouse.get_pos()[1]//4)//8)
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                
+                if camera_scroll_standard == 1 :
+                    player_rect.x = camera_scroll[0]+pygame.mouse.get_pos()[0]//4
+                    player_rect.y = camera_scroll[1]+pygame.mouse.get_pos()[1]//4
+                if camera_scroll_standard == 2 :
+                    player2_rect.x = camera_scroll[0]+pygame.mouse.get_pos()[0]//4
+                    player2_rect.y = camera_scroll[1]+pygame.mouse.get_pos()[1]//4
+
     
     surf = pygame.transform.scale(screen_scaled, WINDOW_SIZE)
     screen.blit(surf,(0,0))

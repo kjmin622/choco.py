@@ -24,6 +24,7 @@ PLAYER_NAME1 = "냥이1"
 PLAYER_NAME2 = "냥이2"
 
 TESTMODE = True
+TESTSPAWN = (101,465)
 
 MAPLIST = MAPDATA
 MAPDOCUMANT = {
@@ -119,6 +120,79 @@ class Map:
         image.set_colorkey((0,0,0))
         return image
 
+    def create_map_image_by_list(self, rclist):
+        image = pygame.Surface((TILE_MAPSIZE[0]*TILE_SIZE, TILE_MAPSIZE[1]*TILE_SIZE))
+        for (row,col,iscreate) in rclist:
+            tmpimage = None
+            if iscreate:
+                aroundTile = [False,False,False,False]
+                #T***
+                if((row,col-1) in MAPDOCUMANT["tile"]):
+                    aroundTile[0]=True
+                #*T**
+                if((row-1,col) in MAPDOCUMANT["tile"]):
+                    aroundTile[1]=True
+                #**T*
+                if((row,col+1) in MAPDOCUMANT["tile"]):
+                    aroundTile[2]=True
+                #***T
+                if((row+1,col) in MAPDOCUMANT["tile"]):
+                    aroundTile[3]=True
+
+                #FFFF
+                if(aroundTile == [False,False,False,False]):
+                    tmpimage = pygame.transform.rotate(self.sheet_ground.spr[5],0)
+                #TFFF
+                elif(aroundTile == [True,False,False,False]):
+                    tmpimage = pygame.transform.rotate(self.sheet_ground.spr[3],180)
+                #FTFF
+                elif(aroundTile == [False,True,False,False]):
+                    tmpimage = pygame.transform.rotate(self.sheet_ground.spr[3],270)
+                #FFTF
+                elif(aroundTile == [False,False,True,False]):
+                    tmpimage = pygame.transform.rotate(self.sheet_ground.spr[3],0)
+                #FFFT
+                elif(aroundTile == [False,False,False,True]):
+                    tmpimage = pygame.transform.rotate(self.sheet_ground.spr[3],90)
+                #TTFF
+                elif(aroundTile == [True,True,False,False]):
+                    tmpimage = pygame.transform.rotate(self.sheet_ground.spr[2],270)
+                #TFTF
+                elif(aroundTile == [True,False,True,False]):
+                    tmpimage = pygame.transform.rotate(self.sheet_ground.spr[4],90)
+                #TFFT
+                elif(aroundTile == [True,False,False,True]):
+                    tmpimage = pygame.transform.rotate(self.sheet_ground.spr[2],180)
+                #FTTF
+                elif(aroundTile == [False,True,True,False]):
+                    tmpimage = pygame.transform.rotate(self.sheet_ground.spr[2],0)
+                #FTFT
+                elif(aroundTile == [False,True,False,True]):
+                    tmpimage = pygame.transform.rotate(self.sheet_ground.spr[4],0)
+                #FFTT
+                elif(aroundTile == [False,False,True,True]):
+                    tmpimage = pygame.transform.rotate(self.sheet_ground.spr[2],90)
+                #TTTF
+                elif(aroundTile == [True,True,True,False]):
+                    tmpimage = pygame.transform.rotate(self.sheet_ground.spr[1],270)
+                #TTFT
+                elif(aroundTile == [True,True,False,True]):
+                    tmpimage = pygame.transform.rotate(self.sheet_ground.spr[1],180)
+                #TFTT
+                elif(aroundTile == [True,False,True,True]):
+                    tmpimage = pygame.transform.rotate(self.sheet_ground.spr[1],90)
+                #FTTT
+                elif(aroundTile == [False,True,True,True]):
+                    tmpimage = pygame.transform.rotate(self.sheet_ground.spr[1],0)
+                #TTTT
+                elif(aroundTile == [True,True,True,True]):
+                    tmpimage = pygame.transform.rotate(self.sheet_ground.spr[0],0)
+                image.blit(tmpimage,(row*TILE_SIZE, col*TILE_SIZE))
+            else:
+                pygame.draw.rect(image, (0,0,0), (row*TILE_SIZE, col*TILE_SIZE, TILE_SIZE, TILE_SIZE))
+        image.set_colorkey((0,0,0))
+        return image
+
     def setGround(self, row, col, remove=False):
         if(not remove):
             MAPDOCUMANT["tile"].append((row,col))
@@ -126,10 +200,11 @@ class Map:
             MAPDOCUMANT["tile"].remove((row,col))
 
 class FuncSetGround:
-    def __init__(self, mapObj, row, col):
+    def __init__(self, mapObj, row, col, reverse):
         self.mapObj = mapObj
         self.row = row
         self.col = col
+        self.reverse = reverse
         
     def removefunc(self):
         global MAPDOCUMANT
@@ -139,6 +214,18 @@ class FuncSetGround:
     def appendfunc(self):
         global MAPDOCUMANT
         MAPDOCUMANT["tile"].append((self.row,self.col))
+
+    def startfunc(self):
+        if(self.reverse):
+            self.removefunc()
+        else:
+            self.appendfunc()
+    
+    def endfunc(self):
+        if(self.reverse):
+            self.appendfunc()
+        else:
+            self.removefunc()
 
 
 class SpriteSheet:
@@ -233,12 +320,12 @@ def change_playerAction(frame, action_var, new_var, frameSpd, new_frameSpd, aniM
 
 
 class Button:
-    def __init__(self, rect, sprite, startfunc, endfunc):
+    def __init__(self, rect, sprite, func):
         self.sprite = sprite
         self.rect = rect
-        self.startfunc = startfunc
-        self.endfunc = endfunc
+        self.func = func
         self.status = False
+        self.change_map = (0,0,True) # True: 땅 생성, False: 땅 제거
     
     def eventImage(self,image):
         if(self.status):
@@ -253,12 +340,21 @@ class Button:
         # 접촉했을 때
         if(not self.status and (collision_object(p1, self.rect) or collision_object(p2, self.rect))):
             self.status = True
-            self.startfunc()
+            self.func.startfunc()
+            if(self.func.reverse):
+                self.change_map = (self.func.row, self.func.col, False)
+            else:
+                self.change_map = (self.func.row, self.func.col, True)
+
             return True
         # 접촉해제
         elif(self.status and not (collision_object(p1, self.rect) or collision_object(p2, self.rect))):
             self.status = False
-            self.endfunc()
+            self.func.endfunc()
+            if(self.func.reverse):
+                self.change_map = (self.func.row, self.func.col, True)
+            else:
+                self.change_map = (self.func.row, self.func.col, False)        
             return True
         return False
 
@@ -293,6 +389,7 @@ class ScriptEvent:
         self.sprite = sprite
         self.scriptText = ScriptText(text)
         self.imageinit = False
+        self.change_map = None
     
     def eventImage(self,image):
         if not self.imageinit:
