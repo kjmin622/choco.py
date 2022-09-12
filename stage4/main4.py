@@ -37,7 +37,7 @@ mapManager = Map(screen_scaled, spriteSheet_ground)
 
 # 최초 스폰 위치
 player_spawn_x, player_spawn_y = MAPDOCUMANT["spawn"]
-mapImage = mapManager.createMapImage()
+mapImage = mapManager.create_map_image()
 
 ## test
 if(TESTMODE):
@@ -204,15 +204,17 @@ script_text_List = [
     (53,453,"공중에 있는 친구 머리를 밟고 뛰면... 높게는 뛰겠지만 기분은 나쁠지도"),
     (99,465,"이게 엘레베이터라고? 낑겨 죽는거 아니야?"),
     (166,447,"다시 내려가는 문인가?")
-
 ]
 
 # event func
 ## button_ground
 for event in button_Ground_List:
-    eventfunc = FuncSetGround(mapManager, event[2], event[3], event[4])
-    eventList.append(Button(pygame.Rect((event[0]*TILE_SIZE, event[1]*TILE_SIZE), (8,8)), spriteSheet_object, eventfunc))
-
+    eventfunc = FuncSetGround(mapManager, event[2], event[3])
+    if(not event[4]):
+        eventList.append(Button(pygame.Rect((event[0]*TILE_SIZE, event[1]*TILE_SIZE), (8,8)), spriteSheet_object, eventfunc.appendfunc, eventfunc.removefunc))
+    else:
+        eventList.append(Button(pygame.Rect((event[0]*TILE_SIZE, event[1]*TILE_SIZE), (8,8)), spriteSheet_object, eventfunc.removefunc, eventfunc.appendfunc))
+        
 ## script event
 for event in script_text_List:
     eventfunc = ScriptEvent(pygame.Rect((event[0]*TILE_SIZE, event[1]*TILE_SIZE),(8,8)), spriteSheet_object, event[2])
@@ -388,21 +390,16 @@ while True:
     #screen_scaled.blit(mapImage_front, (-camera_scroll[0], -camera_scroll[1]))
 
     # 이벤트 관리
-    eventGroundList = []
+    eventFlag = False
     for event in eventList:        
         nowFlag = event.perceive(player_rect, player2_rect)
         if(nowFlag):
+            eventFlag = True
             eventImage = event.eventImage(eventImage)
-            if(event.change_map != None):
-                eventGroundList.append(event.change_map)
     eventImage.set_colorkey((0,0,0))
-    s = time.time()
-    if len(eventGroundList) > 0:
-        eventImage.blit(mapManager.create_map_image_by_list(eventGroundList), (0,0))
-    t = time.time()-s
-    if(t>0.01):
-        print(t)
     screen_scaled.blit(eventImage,(-camera_scroll[0], -camera_scroll[1]))
+    if(eventFlag):
+        mapImage = mapManager.create_map_image()
 
     # 키 입력
     for event in pygame.event.get():
