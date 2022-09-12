@@ -121,15 +121,15 @@ class Map:
         image.set_colorkey((0,0,0))
         return image
 
-    def setGround(self, row, col, remove=False):
+    def set_ground(self, row, col, remove=False):
         if(not remove):
             MAPDOCUMANT["tile"].append((row,col))
         else:
             MAPDOCUMANT["tile"].remove((row,col))
 
 class FuncSetGround:
-    def __init__(self, mapObj, row, col):
-        self.mapObj = mapObj
+    def __init__(self, map_obj, row, col):
+        self.map_obj = map_obj
         self.row = row
         self.col = col
         
@@ -160,15 +160,15 @@ class SpriteSheet:
             image.set_colorkey((0,0,0))
             self.spr.append(image)
 
-def createSpriteSet(spriteSheet, index_list, index_max = None):
+def create_sprite_set(sprite_sheet, index_list, index_max = None):
     spr = []
 
     if index_max == None:
         for index in index_list:
-            spr.append(spriteSheet.spr[index])
+            spr.append(sprite_sheet.spr[index])
     else:
         for index in range(index_list, index_max+1):
-            spr.append(spriteSheet.spr[index])
+            spr.append(sprite_sheet.spr[index])
     
     return spr
 
@@ -223,14 +223,14 @@ def move(rect, otherRect, movement):
 
 
 #  애니메이션 변경 함수
-def change_playerAction(frame, action_var, new_var, frameSpd, new_frameSpd, aniMode, new_aniMode):
+def change_player_action(frame, action_var, new_var, frame_spd, new_frame_spd, ani_mode, new_ani_mode):
     if action_var != new_var:
         action_var = new_var
         frame = 0
-        frameSpd = new_frameSpd
-        aniMode = new_aniMode
+        frame_spd = new_frame_spd
+        ani_mode = new_ani_mode
 
-    return frame, action_var, frameSpd, aniMode
+    return frame, action_var, frame_spd, ani_mode
 
 
 
@@ -242,7 +242,7 @@ class Button:
         self.endfunc = endfunc
         self.status = False
     
-    def eventImage(self,image):
+    def event_image(self,image):
         if(self.status):
             pygame.draw.rect(image, (0,0,0), [self.rect.x,self.rect.y,self.rect.width, self.rect.height])
             image.blit(self.sprite.spr[1],(self.rect.x,self.rect.y))
@@ -268,25 +268,24 @@ class ScriptText:
     def __init__(self,text):
         self.text = text
         self.display = False
-        self.atLeastOnce = False
         self.image = self.makeimage()
 
     def makeimage(self):
         image = pygame.Surface(WINDOW_SIZE)
         pygame.draw.rect(image,(245,245,245),[50,WINDOW_SIZE[1]-200, WINDOW_SIZE[0]-100, 180])
         
-        gameFont = pygame.font.Font(os.path.join(DIR_FONT, DEFAULT_FONT_NAME),30)
-        text_surface = gameFont.render(self.text,False,(50,50,50))
+        gamefont = pygame.font.Font(os.path.join(DIR_FONT, DEFAULT_FONT_NAME),30)
+        text_surface = gamefont.render(self.text,False,(50,50,50))
         text_rect = text_surface.get_rect()
         text_rect.midtop = (round(WINDOW_SIZE[0]/2),round(WINDOW_SIZE[1]-115))
         image.blit(text_surface, text_rect)
         image.set_colorkey((0,0,0))
         return image
 
-    def switchdisplay(self):
+    def switch_display(self):
         self.display = not self.display
 
-    def isShow(self):
+    def is_show(self):
         return self.display
 
 class ScriptEvent:
@@ -296,7 +295,7 @@ class ScriptEvent:
         self.scriptText = ScriptText(text)
         self.imageinit = False
     
-    def eventImage(self,image):
+    def event_image(self,image):
         if not self.imageinit:
             image.blit(self.sprite.spr[2],(self.rect.x, self.rect.y))
             self.imageinit = True

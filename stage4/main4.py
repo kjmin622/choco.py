@@ -24,14 +24,14 @@ spriteSheet_object = SpriteSheet("object.png", 8,8,80,8,10)
 spriteSheet_map1 = SpriteSheet("map1.png",8,8,16,16,87)
 
 spr_player = {}
-spr_player["stay"] = createSpriteSet(spriteSheet_player, [0])
-spr_player['run'] = createSpriteSet(spriteSheet_player, 1, 8)
-spr_player['jump'] = createSpriteSet(spriteSheet_player, [9, 10, 11])
+spr_player["stay"] = create_sprite_set(spriteSheet_player, [0])
+spr_player['run'] = create_sprite_set(spriteSheet_player, 1, 8)
+spr_player['jump'] = create_sprite_set(spriteSheet_player, [9, 10, 11])
 
 spr_player2 = {}
-spr_player2["stay"] = createSpriteSet(spriteSheet_player2, [0])
-spr_player2['run'] = createSpriteSet(spriteSheet_player2, 1, 8)
-spr_player2['jump'] = createSpriteSet(spriteSheet_player2, [9, 10, 11])
+spr_player2["stay"] = create_sprite_set(spriteSheet_player2, [0])
+spr_player2['run'] = create_sprite_set(spriteSheet_player2, 1, 8)
+spr_player2['jump'] = create_sprite_set(spriteSheet_player2, [9, 10, 11])
 
 mapManager = Map(screen_scaled, spriteSheet_ground)
 
@@ -222,9 +222,9 @@ for event in script_text_List:
     eventList.append(eventfunc)
 
 # event image
-eventImage = pygame.Surface((TILE_MAPSIZE[0]*TILE_SIZE, TILE_MAPSIZE[1]*TILE_SIZE))
+event_image = pygame.Surface((TILE_MAPSIZE[0]*TILE_SIZE, TILE_MAPSIZE[1]*TILE_SIZE))
 for event in eventList:
-    eventImage = event.eventImage(eventImage)
+    event_image = event.event_image(event_image)
 
 keyLeft = False
 keyRight = False
@@ -295,7 +295,7 @@ while True:
     
     if player_movement[0] != 0:
         if player_flytime == 0:
-            player_frame, player_action, player_frameSpeed, player_animationMode = change_playerAction(
+            player_frame, player_action, player_frameSpeed, player_animationMode = change_player_action(
                 player_frame, player_action, 'run', player_frameSpeed, 3, player_animationMode, True
             )
         
@@ -305,7 +305,7 @@ while True:
             player_flip = True
     else:
         if player_flytime == 0:
-            player_frame, player_action, player_frameSpeed, player_animationMode = change_playerAction(
+            player_frame, player_action, player_frameSpeed, player_animationMode = change_player_action(
                 player_frame, player_action, 'stay', player_frameSpeed, 3, player_animationMode, True
                 )
 
@@ -348,7 +348,7 @@ while True:
     
     if player2_movement[0] != 0:
         if player2_flytime == 0:
-            player2_frame, player2_action, player2_frameSpeed, player2_animationMode = change_playerAction(
+            player2_frame, player2_action, player2_frameSpeed, player2_animationMode = _a(
                 player2_frame, player2_action, 'run', player2_frameSpeed, 3, player2_animationMode, True
             )
         
@@ -358,7 +358,7 @@ while True:
             player2_flip = True
     else:
         if player2_flytime == 0:
-            player2_frame, player2_action, player2_frameSpeed, player2_animationMode = change_playerAction(
+            player2_frame, player2_action, player2_frameSpeed, player2_animationMode = _a(
                 player2_frame, player2_action, 'stay', player2_frameSpeed, 3, player2_animationMode, True
                 )
 
@@ -395,9 +395,9 @@ while True:
         nowFlag = event.perceive(player_rect, player2_rect)
         if(nowFlag):
             eventFlag = True
-            eventImage = event.eventImage(eventImage)
-    eventImage.set_colorkey((0,0,0))
-    screen_scaled.blit(eventImage,(-camera_scroll[0], -camera_scroll[1]))
+            event_image = event.event_image(event_image)
+    event_image.set_colorkey((0,0,0))
+    screen_scaled.blit(event_image,(-camera_scroll[0], -camera_scroll[1]))
     if(eventFlag):
         mapImage = mapManager.create_map_image()
 
@@ -415,7 +415,7 @@ while True:
             if event.key == K_w and player_flytime < 6:
                 player_vspeed = -3.5
                 player_flytime += 1
-                player_frame, player_action, player_frameSpeed,player_animationMode = change_playerAction(
+                player_frame, player_action, player_frameSpeed,player_animationMode = _a(
                     player_frame, player_action, "jump", player_frameSpeed, 6, player_animationMode, False
                 )
             #player2
@@ -426,7 +426,7 @@ while True:
             if event.key == K_UP and player2_flytime < 6:
                 player2_vspeed = -3.5
                 player2_flytime += 1
-                player2_frame, player2_action, player2_frameSpeed,player2_animationMode = change_playerAction(
+                player2_frame, player2_action, player2_frameSpeed,player2_animationMode = _a(
                     player2_frame, player2_action, "jump", player2_frameSpeed, 6, player2_animationMode, False
                 )
 
@@ -473,7 +473,7 @@ while True:
     
     # script text
     for script in scriptEventList:
-        if(script.scriptText.isShow()):
+        if(script.scriptText.is_show()):
             screen.blit(script.scriptText.image,(0,0))
 
     pygame.display.update()
