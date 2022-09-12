@@ -33,12 +33,10 @@ spr_player2['run'] = createSpriteSet(spriteSheet_player2, 1, 8)
 spr_player2['jump'] = createSpriteSet(spriteSheet_player2, [9, 10, 11])
 
 mapManager = Map(screen_scaled, spriteSheet_ground)
+
+# 최초 스폰 위치
 player_spawn_x, player_spawn_y = MAPDOCUMANT["spawn"]
 mapImage = mapManager.createMapImage()
-
-#test
-if(TESTMODE):
-    player_spawn_x, player_spawn_y = (101,465)
 
 # event list
 eventList = []
@@ -196,6 +194,11 @@ player2_walkSoundToggle = False
 player2_walkSoundTimer = 0
 
 camera_scroll_standard = 1
+
+
+## test
+if(TESTMODE):
+    player_spawn_x, player_spawn_y = (101,465)
 
 while True:
     screen_scaled.fill(BACKGROUND_COLOR)
