@@ -2,6 +2,7 @@ import pygame
 import random
 import sys
 import os
+from timer import *
 
 pygame.init()
 
@@ -16,28 +17,63 @@ DIR_IMAGE = os.path.join(DIR_PATH, 'image')
 
 current_time = 0
 
+mouse_pos = ()
+
 password = [0,1,2,3,4,5,6,7,8,9]
 random.shuffle(password)
 password = password[:5]
 
 button_list = []
+button_click_list = []
 
 class Button:
-    image = pygame.image.load(os.path.join(DIR_IMAGE,'button.png')).convert()
-    size = image.get_rect()
-    width = size[0]
-    height = size[1]
     
     def __init__(self, x_pos, y_pos):
+        self.image = pygame.image.load(os.path.join(DIR_IMAGE,'button.png')).convert()
+        self.rect = self.image.get_rect()
+        self.size = self.image.get_rect().size
+        self.width = self.size[0]
+        self.height = self.size[1]
         self.x_pos = x_pos
         self.y_pos = y_pos
+        self.rect.left = self.x_pos
+        self.rect.top = self.y_pos
         
-    def draw_button(self):
+    def button_draw(self):
         screen.blit(self.image, (self.x_pos, self.y_pos))
 
     def button_press(self):
         self.image = pygame.image.load(os.path.join(DIR_IMAGE,'button_press.png')).convert()
-        self.draw_button()
+        self.button_draw()
+
+    def button_reset(self):
+        self.image = pygame.image.load(os.path.join(DIR_IMAGE,'button.png')).convert()
+        self.button_draw()
+
+    def button_is_clicked(self, mouse):
+        return self.rect.collidepoint(mouse)
+
+    def button_push_click_list(self, mouse):
+        if self.button_is_clicked(mouse):
+            for i in range(len(button_list)):
+                if button_list[i] == self:
+                    button_click_list.append(i)
+                    print(i)
+
+def show_password(level):#현재 레벨
+    for now in password[:level]:
+        delay_timer = Timer(0.4)
+        delay_timer.start()
+        while not delay_timer.is_done():
+           pass
+        button_list[now].button_press()
+        pygame.display.update()
+    delay_timer.set_time(1)
+    delay_timer.start()
+    while not delay_timer.is_done():
+        pass
+    for now in password[:level]:
+        button_list[now].button_reset()
 
 for i in range(10):
     button_list.append(Button(104 + (i%5)*184, 203 + (i//5)*283))
@@ -168,23 +204,33 @@ while running:
             if event.type == pygame.QUIT:
                 running = False
 
+            if event.type == pygame.MOUSEBUTTONUP:
+                mouse_pos = event.pos
+                for button in button_list:
+                    button.button_push_click_list(mouse_pos)
+                
         for button in button_list:
-            button.draw_button()
-            
-        current_time += 1
-        if current_time == 20:
-            button_list[password[0]].button_press()
-            current_time = 0
+            button.button_draw()
+            pygame.display.update()
+        
+        show_password(5)
+
+        
+        
+        
+        
             
         
     pygame.display.update()
 
-if gameover:
+if gameover:#게임오버 되었을 경우
+    gameover_timer = Timer(1)
+    gameover_timer.start()
     msg = game_font.render("Game Over",True,(255,255,0)) # 노란색
     msg_rect = msg.get_rect(center=(int(SCREEN_WIDTH/2),int(SCREEN_HEIGHT/2)))
-    screen.blit(msg,msg_rect)
-    pygame.display.update()
-    pygame.time.delay(1000)
+    while not gameover_timer.is_done():
+        screen.blit(msg,msg_rect)
+        pygame.display.update()
 
 pygame.quit()
 sys.exit()
