@@ -6,6 +6,7 @@ sys.stderr = io.TextIOWrapper(sys.stderr.detach(), encoding = 'utf-8')
 
 
 WHITE = (255,255,255)
+YELLOW = (255,255,0)
 pad_width = 1024
 pad_height = 768
 GameTime = 180
@@ -16,6 +17,9 @@ Pase3 = 24
 def drawObject(obj, x, y):
     gamepad.blit(obj, (x, y))
 
+def drawMessage(msg):
+    text=font.render("%s"%(msg), True, YELLOW)
+    gamepad.blit(text, (512,384))
 
 def drawScore(x, y):
     text=font.render("%s, %s"%(x, y), True, WHITE)
@@ -52,7 +56,7 @@ def runGame():
     life = 3
     speed = 16
     start_ticks = pygame.time.get_ticks()
-    x=pad_width*0.05
+    x=pad_width*0.05  
     y=pad_height*0.8
     wall_x = random.randrange(pad_width, pad_width+400)
     wall_1_x=random.randrange(pad_width, pad_width+400)
@@ -78,9 +82,9 @@ def runGame():
             running = False
         
         if life==0:
+            time.sleep(1)
+            pygame.quit()
 
-                time.sleep(1)
-                pygame.quit()
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -111,11 +115,12 @@ def runGame():
         elif y<pad_height-cat_height and y_change>0:
             y+=y_change
 
-
         if seconds <60:
             speed = Pase1
+
         elif seconds<120:
             speed = Pase2
+
         else:
             speed = Pase3
             
@@ -193,6 +198,7 @@ def runGame():
         drawObject(cat, x, y)
         drawTime(seconds)
         drawLife(life)
+        drawMessage("Game Over")
         pygame.display.update()
         clock.tick(60)
 
