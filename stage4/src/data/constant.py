@@ -1,8 +1,6 @@
 # 상수 모음
 import os
-from mapdata import *
-
-DIR_PATH = os.path.dirname(__file__)
+DIR_PATH = os.path.dirname(os.path.dirname(os.path.abspath(os.path.dirname(__file__))))
 DIR_IMAGE = os.path.join(DIR_PATH, 'image')
 DIR_SOUND = os.path.join(DIR_PATH, 'sound')
 DIR_FONT = os.path.join(DIR_PATH, 'font')
@@ -25,5 +23,3 @@ PLAYER_NAME2 = "냥이2"
 
 TESTMODE = True
 TESTSPAWN = (101,465)
-
-MAPLIST = MAPDATA

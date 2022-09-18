@@ -1,34 +1,38 @@
 import pygame
-from constant import *
-from globalvariable import *
+import os
+import sys
+
+sys.path.append(os.path.dirname(os.path.abspath(os.path.dirname(__file__))))
+from data.constant import *
+import data.globalvariable as g
+from data.mapdata import *
 
 class Map:
     def __init__(self, screen, sheet_ground):
-        global g_mapdocumant
         self.sheet_ground = sheet_ground
         self.screen = screen
         for data in MAPLIST.keys():
             index = data.split(",")
             index = [int(index[0]),int(index[1])]
             if MAPLIST[data]==1 :
-                g_mapdocumant["tile"].append((index[0],index[1]))
+                g.g_mapdocumant["tile"].append((index[0],index[1]))
             if MAPLIST[data]==-1 :
-                g_mapdocumant["spawn"] = [index[0],index[1]]
+                g.g_mapdocumant["spawn"] = [index[0],index[1]]
 
     def _get_suitable_tile(self, row, col):
         tmpimage = None
         aroundTile = [False,False,False,False]
             #T***
-        if((row,col-1) in g_mapdocumant["tile"]):
+        if((row,col-1) in g.g_mapdocumant["tile"]):
             aroundTile[0]=True
         #*T**
-        if((row-1,col) in g_mapdocumant["tile"]):
+        if((row-1,col) in g.g_mapdocumant["tile"]):
             aroundTile[1]=True
         #**T*
-        if((row,col+1) in g_mapdocumant["tile"]):
+        if((row,col+1) in g.g_mapdocumant["tile"]):
             aroundTile[2]=True
         #***T
-        if((row+1,col) in g_mapdocumant["tile"]):
+        if((row+1,col) in g.g_mapdocumant["tile"]):
             aroundTile[3]=True
 
         #FFFF
@@ -85,7 +89,7 @@ class Map:
     def create_map_image(self):
         image = pygame.Surface((TILE_MAPSIZE[0]*TILE_SIZE, TILE_MAPSIZE[1]*TILE_SIZE))
         
-        for (row,col) in g_mapdocumant["tile"]: 
+        for (row,col) in g.g_mapdocumant["tile"]: 
             image.blit(self._get_suitable_tile(row,col),(row*TILE_SIZE, col*TILE_SIZE))
 
         image.set_colorkey((0,0,0))
@@ -93,6 +97,6 @@ class Map:
 
     def set_ground(self, row, col, remove=False):
         if(not remove):
-            g_mapdocumant["tile"].append((row,col))
+            g.g_mapdocumant["tile"].append((row,col))
         else:
-            g_mapdocumant["tile"].remove((row,col))
+            g.g_mapdocumant["tile"].remove((row,col))
