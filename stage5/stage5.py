@@ -78,9 +78,10 @@ def runGame():
             running = False
         
         if life==0:
+
                 time.sleep(1)
                 pygame.quit()
-                
+
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
@@ -111,9 +112,9 @@ def runGame():
             y+=y_change
 
 
-        if seconds <10:
+        if seconds <60:
             speed = Pase1
-        elif seconds<20:
+        elif seconds<120:
             speed = Pase2
         else:
             speed = Pase3
