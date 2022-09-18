@@ -1,131 +1,7 @@
-import pygame, os, random
-from mapdata import *
+import pygame, os
+from constant import *
+from globalvariable import *
 
-# 상수 모음
-DIR_PATH = os.path.dirname(__file__)
-DIR_IMAGE = os.path.join(DIR_PATH, 'image')
-DIR_SOUND = os.path.join(DIR_PATH, 'sound')
-DIR_FONT = os.path.join(DIR_PATH, 'font')
-
-WINDOW_SIZE = (1080,720)
-TILE_SIZE = 8
-
-TILE_MAPSIZE = (2000,500)
-
-BACKGROUND_COLOR = (27,25,25)
-
-DEFAULT_FONT_NAME = "Sunflower-Medium.ttf"
-
-PLAYER_ROWSPEED = 2
-PLAYER_MAXCOLSPEED = 3
-PLAYER_COLACCELERATE = 0.2
-
-PLAYER_NAME1 = "냥이1"
-PLAYER_NAME2 = "냥이2"
-
-TESTMODE = True
-TESTSPAWN = (101,465)
-
-MAPLIST = MAPDATA
-MAPDOCUMANT = {
-            "tile":[],
-            "spawn":[],
-        }
-
-class Map:
-    def __init__(self, screen, sheet_ground):
-        global MAPDOCUMANT
-        self.sheet_ground = sheet_ground
-        self.screen = screen
-        for data in MAPLIST.keys():
-            index = data.split(",")
-            index = [int(index[0]),int(index[1])]
-            if MAPLIST[data]==1 :
-                MAPDOCUMANT["tile"].append((index[0],index[1]))
-            if MAPLIST[data]==-1 :
-                MAPDOCUMANT["spawn"] = [index[0],index[1]]
-
-    def _get_suitable_tile(self, row, col):
-        tmpimage = None
-        aroundTile = [False,False,False,False]
-            #T***
-        if((row,col-1) in MAPDOCUMANT["tile"]):
-            aroundTile[0]=True
-        #*T**
-        if((row-1,col) in MAPDOCUMANT["tile"]):
-            aroundTile[1]=True
-        #**T*
-        if((row,col+1) in MAPDOCUMANT["tile"]):
-            aroundTile[2]=True
-        #***T
-        if((row+1,col) in MAPDOCUMANT["tile"]):
-            aroundTile[3]=True
-
-        #FFFF
-        if(aroundTile == [False,False,False,False]):
-            tmpimage = pygame.transform.rotate(self.sheet_ground.spr[5],0)
-        #TFFF
-        elif(aroundTile == [True,False,False,False]):
-            tmpimage = pygame.transform.rotate(self.sheet_ground.spr[3],180)
-        #FTFF
-        elif(aroundTile == [False,True,False,False]):
-            tmpimage = pygame.transform.rotate(self.sheet_ground.spr[3],270)
-        #FFTF
-        elif(aroundTile == [False,False,True,False]):
-            tmpimage = pygame.transform.rotate(self.sheet_ground.spr[3],0)
-        #FFFT
-        elif(aroundTile == [False,False,False,True]):
-            tmpimage = pygame.transform.rotate(self.sheet_ground.spr[3],90)
-        #TTFF
-        elif(aroundTile == [True,True,False,False]):
-            tmpimage = pygame.transform.rotate(self.sheet_ground.spr[2],270)
-        #TFTF
-        elif(aroundTile == [True,False,True,False]):
-            tmpimage = pygame.transform.rotate(self.sheet_ground.spr[4],90)
-        #TFFT
-        elif(aroundTile == [True,False,False,True]):
-            tmpimage = pygame.transform.rotate(self.sheet_ground.spr[2],180)
-        #FTTF
-        elif(aroundTile == [False,True,True,False]):
-            tmpimage = pygame.transform.rotate(self.sheet_ground.spr[2],0)
-        #FTFT
-        elif(aroundTile == [False,True,False,True]):
-            tmpimage = pygame.transform.rotate(self.sheet_ground.spr[4],0)
-        #FFTT
-        elif(aroundTile == [False,False,True,True]):
-            tmpimage = pygame.transform.rotate(self.sheet_ground.spr[2],90)
-        #TTTF
-        elif(aroundTile == [True,True,True,False]):
-            tmpimage = pygame.transform.rotate(self.sheet_ground.spr[1],270)
-        #TTFT
-        elif(aroundTile == [True,True,False,True]):
-            tmpimage = pygame.transform.rotate(self.sheet_ground.spr[1],180)
-        #TFTT
-        elif(aroundTile == [True,False,True,True]):
-            tmpimage = pygame.transform.rotate(self.sheet_ground.spr[1],90)
-        #FTTT
-        elif(aroundTile == [False,True,True,True]):
-            tmpimage = pygame.transform.rotate(self.sheet_ground.spr[1],0)
-        #TTTT
-        elif(aroundTile == [True,True,True,True]):
-            tmpimage = pygame.transform.rotate(self.sheet_ground.spr[0],0)
-        
-        return tmpimage
-
-    def create_map_image(self):
-        image = pygame.Surface((TILE_MAPSIZE[0]*TILE_SIZE, TILE_MAPSIZE[1]*TILE_SIZE))
-        
-        for (row,col) in MAPDOCUMANT["tile"]: 
-            image.blit(self._get_suitable_tile(row,col),(row*TILE_SIZE, col*TILE_SIZE))
-
-        image.set_colorkey((0,0,0))
-        return image
-
-    def set_ground(self, row, col, remove=False):
-        if(not remove):
-            MAPDOCUMANT["tile"].append((row,col))
-        else:
-            MAPDOCUMANT["tile"].remove((row,col))
 
 class FuncSetGround:
     def __init__(self, map_obj, row, col):
@@ -134,13 +10,13 @@ class FuncSetGround:
         self.col = col
         
     def removefunc(self):
-        global MAPDOCUMANT
-        if((self.row,self.col) in MAPDOCUMANT["tile"]):
-            MAPDOCUMANT["tile"].remove((self.row,self.col))
+        global g_mapdocumant
+        if((self.row,self.col) in g_mapdocumant["tile"]):
+            g_mapdocumant["tile"].remove((self.row,self.col))
     
     def appendfunc(self):
-        global MAPDOCUMANT
-        MAPDOCUMANT["tile"].append((self.row,self.col))
+        global g_mapdocumant
+        g_mapdocumant["tile"].append((self.row,self.col))
 
 
 class SpriteSheet:
@@ -176,7 +52,7 @@ def create_sprite_set(sprite_sheet, index_list, index_max = None):
 # 바닥과 충돌 검사 함수
 def collision_floor(rect):
     hit_list = []
-    for (row,col) in MAPDOCUMANT["tile"]:
+    for (row,col) in g_mapdocumant["tile"]:
         floor_rect = pygame.rect.Rect((row * TILE_SIZE, col * TILE_SIZE), (TILE_SIZE, TILE_SIZE))
         if rect.colliderect(floor_rect):
             hit_list.append(floor_rect)
@@ -304,9 +180,9 @@ class ScriptEvent:
     def perceive(self, p1, p2):
         #접촉했을 때
         if(self.scriptText.display==False and (collision_object(p1, self.rect) or collision_object(p2, self.rect))):
-            self.scriptText.switchdisplay()
+            self.scriptText.switch_display()
             return True
         # 접촉해제
         if(self.scriptText.display==True and not(collision_object(p1, self.rect) or collision_object(p2, self.rect))):
-            self.scriptText.switchdisplay()
+            self.scriptText.switch_display()
             return False

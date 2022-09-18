@@ -1,10 +1,12 @@
 from asyncio import events
 import pygame, sys, os
-from funcs import *
 from pygame.locals import *
 import pygame.mixer
 
-import time
+from constant import *
+from globalvariable import *
+from funcs import *
+from map import *
 
 
 pygame.init()
@@ -36,7 +38,7 @@ spr_player2['jump'] = create_sprite_set(spriteSheet_player2, [9, 10, 11])
 mapManager = Map(screen_scaled, spriteSheet_ground)
 
 # 최초 스폰 위치
-player_spawn_x, player_spawn_y = MAPDOCUMANT["spawn"]
+player_spawn_x, player_spawn_y = g_mapdocumant["spawn"]
 mapImage = mapManager.create_map_image()
 
 ## test
@@ -348,7 +350,7 @@ while True:
     
     if player2_movement[0] != 0:
         if player2_flytime == 0:
-            player2_frame, player2_action, player2_frameSpeed, player2_animationMode = _a(
+            player2_frame, player2_action, player2_frameSpeed, player2_animationMode = change_player_action(
                 player2_frame, player2_action, 'run', player2_frameSpeed, 3, player2_animationMode, True
             )
         
@@ -358,7 +360,7 @@ while True:
             player2_flip = True
     else:
         if player2_flytime == 0:
-            player2_frame, player2_action, player2_frameSpeed, player2_animationMode = _a(
+            player2_frame, player2_action, player2_frameSpeed, player2_animationMode = change_player_action(
                 player2_frame, player2_action, 'stay', player2_frameSpeed, 3, player2_animationMode, True
                 )
 
@@ -415,7 +417,7 @@ while True:
             if event.key == K_w and player_flytime < 6:
                 player_vspeed = -3.5
                 player_flytime += 1
-                player_frame, player_action, player_frameSpeed,player_animationMode = _a(
+                player_frame, player_action, player_frameSpeed,player_animationMode = change_player_action(
                     player_frame, player_action, "jump", player_frameSpeed, 6, player_animationMode, False
                 )
             #player2
@@ -426,7 +428,7 @@ while True:
             if event.key == K_UP and player2_flytime < 6:
                 player2_vspeed = -3.5
                 player2_flytime += 1
-                player2_frame, player2_action, player2_frameSpeed,player2_animationMode = _a(
+                player2_frame, player2_action, player2_frameSpeed,player2_animationMode = change_player_action(
                     player2_frame, player2_action, "jump", player2_frameSpeed, 6, player2_animationMode, False
                 )
 
