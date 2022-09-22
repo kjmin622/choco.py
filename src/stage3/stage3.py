@@ -61,15 +61,20 @@ def show_password(level):#현재 레벨
            pass
         button_list[now].button_press()
         pygame.display.update()
+
     delay_timer.set_time(1)
     delay_timer.start()
+
     while not delay_timer.is_done():
            pass
+
     for now in password[:level]:
         button_list[now].button_reset()
     pygame.display.update()
+
     delay_timer.set_time(5)
     delay_timer.start()
+
     while not delay_timer.is_done():
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -79,6 +84,15 @@ def show_password(level):#현재 레벨
                     for i in range(len(button_list)):
                         if button_list[i].button_is_clicked(mouse_pos):
                             button_click_list.append(i)
+                            button_list[i].button_press()
+                            pygame.display.update()
+        
+        if button_click_list == password[:level]:
+            break
+    
+    for button in button_list:
+        button.button_reset()
+        pygame.display.update()
 
 def is_password_correct(level):
     return button_click_list == password[:level]
@@ -119,12 +133,9 @@ portal_y_pos = 0
 lights = []
 for i in range(5):
     light = pygame.image.load(os.path.join(DIR_IMAGE,'light.png')).convert()
-    light_size = light.get_rect().size
-    light_width = light_size[0]
-    light_height = light_size[1]
     light_x_pos = 432 + i*30
     light_y_pos = 50
-    lights.append([light,light_width,light_height,light_x_pos,light_y_pos])
+    lights.append([light,light_x_pos,light_y_pos])
 
 to_x = 0
 to_y = 0
@@ -213,22 +224,41 @@ while running:
 
         for button in button_list:
             button.button_draw()
-            pygame.display.update()
-            
+
+        for light in lights:
+            screen.blit(light[0],(light[1],light[2]))
+
+        pygame.display.update()
+
         show_password(1)
         if(is_password_correct(1)):
+            lights[0][0] = pygame.image.load(os.path.join(DIR_IMAGE,'light_clear.png')).convert()
+            screen.blit(lights[0][0],(lights[0][1],lights[0][2]))
+            pygame.display.update()
             button_click_list = []
             show_password(2)
             if(is_password_correct(2)):
+                lights[1][0] = pygame.image.load(os.path.join(DIR_IMAGE,'light_clear.png')).convert()
+                screen.blit(lights[1][0],(lights[1][1],lights[1][2]))
+                pygame.display.update()
                 button_click_list = []
                 show_password(3)
                 if(is_password_correct(3)):
+                    lights[2][0] = pygame.image.load(os.path.join(DIR_IMAGE,'light_clear.png')).convert()
+                    screen.blit(lights[2][0],(lights[2][1],lights[2][2]))
+                    pygame.display.update()
                     button_click_list = []
                     show_password(4)
                     if(is_password_correct(4)):
+                        lights[3][0] = pygame.image.load(os.path.join(DIR_IMAGE,'light_clear.png')).convert()
+                        screen.blit(lights[3][0],(lights[3][1],lights[3][2]))
+                        pygame.display.update()
                         button_click_list = []
                         show_password(5)
                         if(is_password_correct(5)):
+                            lights[4][0] = pygame.image.load(os.path.join(DIR_IMAGE,'light_clear.png')).convert()
+                            screen.blit(lights[4][0],(lights[4][1],lights[4][2]))
+                            pygame.display.update()
                             clear_timer = Timer(1)
                             clear_timer.start()
                             msg = game_font.render("Clear",True,(255,255,0)) # 노란색
