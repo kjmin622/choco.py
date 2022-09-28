@@ -25,6 +25,8 @@ for i in range(len(imgarr)) :
             file.write(f"'{j},{i}':1,")
         if(equal(color,[255,0,0])):
             file.write(f"'{j},{i}':-1,")
+        if(equal(color,[0,0,255])):
+            file.write(f"'{j},{i}':-2,")
 file.write("}")
         
 

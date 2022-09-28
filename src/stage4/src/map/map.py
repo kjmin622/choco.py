@@ -18,6 +18,8 @@ class Map:
                 g.g_mapdocumant["tile"].append((index[0],index[1]))
             if MAPLIST[data]==-1 :
                 g.g_mapdocumant["spawn"] = [index[0],index[1]]
+            if MAPLIST[data]==-2 :
+                g.g_mapdocumant["endpoint"].append([index[0],index[1]]) 
 
     def _get_suitable_tile(self, row, col):
         tmpimage = None
