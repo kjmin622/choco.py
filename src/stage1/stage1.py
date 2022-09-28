@@ -11,8 +11,7 @@ vec = pygame.math.Vector2 #2 for two dimensional
 # 화면 크기 설정
 
 # 게임 내 
-turn_right = False
-turn_left = False
+
 # 게임 프레임 초기 설정
 FramePerSec = pygame.time.Clock()
 # 게임 가로, 세로 창 크기 설정
@@ -27,43 +26,42 @@ background = pygame.image.load(os.path.join(DIR_IMAGE,"bg.png"))
 
 room_dic = {
     "1":room.Room([
-        side.Side([],background,path.Path("2")),
-        side.Side([],background),
-        side.Side([],background),
-        side.Side([],background),
+        side.Side([],"bg.png",path.Path("2")),
+        side.Side([],"bg.png"),
+        side.Side([],"bg.png"),
+        side.Side([],"bg.png"),
     ]),
     "2":room.Room([
-        side.Side([],background),
-        side.Side([],background),
-        side.Side([],background),
-        side.Side([],background),
+        side.Side([],"bg.png"),
+        side.Side([],"bg.png"),
+        side.Side([],"bg.png"),
+        side.Side([],"bg.png"),
     ]),
 }
+present = ["1",0]
 # 이벤트 루프
 running = True
 while running:
+    print(present)
+    screen.blit(room_dic[present[0]].sidelist[present[1]].image,(0,0))
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_d:
-                turn_right = True
-                turn_left = False
+                present[1] = side.turn_right(present[1])
             if event.key == pygame.K_a:
-                turn_right = False
-                turn_left = True
+                present[1] = side.turn_left(present[1])
             if event.key == pygame.K_w:
-                pass
+                if room_dic[present[0]].sidelist[present[1]].path != None:
+                    present[0] = room_dic[present[0]].sidelist[present[1]].path.direction
         if event.type == pygame.KEYUP:
             if event.key == pygame.K_d:
-                turn_right = False
-                turn_left = False
+                pass
             if event.key == pygame.K_a:
-                turn_right = False
-                turn_left = False
+                pass
             if event.key == pygame.K_w:
                 pass
-            
     screen.blit(background, (0, 0))
     
     pygame.display.update() #게임화면 계속 그려주기
