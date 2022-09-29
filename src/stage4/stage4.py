@@ -1,6 +1,8 @@
 import pygame, sys, os
+
 from pygame.locals import *
 import pygame.mixer
+
 from src.data.constant import *
 import src.data.globalvariable as g
 from src.map.map import *
@@ -9,7 +11,10 @@ import src.engine.sprite as sprite
 import src.event.button as button
 import src.event.script as script
 import src.engine.move as move
-from src.init.init import *
+import src.init.init as init
+
+def stage4_init(screen,clock):
+    return init.stage4_init(screen,clock)
 
 def stage4_main(param):
     screen=param['screen'];clock=param['clock'];screen_scaled=param['screen_scaled'];spriteSheet_player=param['spriteSheet_player'];spriteSheet_player2=param['spriteSheet_player2'];spriteSheet_ground=param['spriteSheet_ground'];spriteSheet_object=param['spriteSheet_object'];spr_player=param['spr_player'];spr_player2=param['spr_player2'];mapManager=param['mapManager'];player_spawn_x=param['player_spawn_x'];player_spawn_y=param['player_spawn_y'];mapImage=param['mapImage'];endpoint_list=param['endpoint_list'];eventList=param['eventList'];scriptEventList=param['scriptEventList'];event_image=param['event_image'];keyLeft=param['keyLeft'];keyRight=param['keyRight'];keyLeft2=param['keyLeft2'];keyRight2=param['keyRight2'];player_sponOK=param['player_sponOK'];player2_sponOK=param['player2_sponOK'];camera_scroll=param['camera_scroll'];player_rect=param['player_rect'];player_movement=param['player_movement'];player_vspeed=param['player_vspeed'];player_flytime=param['player_flytime'];player2_rect=param['player2_rect'];player2_movement=param['player2_movement'];player2_vspeed=param['player2_vspeed'];player2_flytime=param['player2_flytime'];player_action=param['player_action'];player_frame=param['player_frame'];player_frameSpeed=param['player_frameSpeed'];player_frameTimer=param['player_frameTimer'];player_flip=param['player_flip'];player_animationMode=param['player_animationMode'];player_walkSoundToggle=param['player_walkSoundToggle'];player_walkSoundTimer=param['player_walkSoundTimer'];player2_action=param['player2_action'];player2_frame=param['player2_frame'];player2_frameSpeed=param['player2_frameSpeed'];player2_frameTimer=param['player2_frameTimer'];player2_flip=param['player2_flip'];player2_animationMode=param['player2_animationMode'];player2_walkSoundToggle=param['player2_walkSoundToggle'];player2_walkSoundTimer=param['player2_walkSoundTimer'];camera_scroll_standard=param['camera_scroll_standard']
