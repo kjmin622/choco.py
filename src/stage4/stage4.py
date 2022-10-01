@@ -162,8 +162,7 @@ def main(param):
         # 키 입력
         for event in pygame.event.get():
             if event.type == QUIT:
-                pygame.quit()
-                sys.exit()
+                return False
             if event.type == KEYDOWN:
                 #player1
                 if event.key == K_a:
@@ -236,3 +235,4 @@ def main(param):
 
         pygame.display.update()
         clock.tick(60)
+    return False
