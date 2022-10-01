@@ -9,14 +9,10 @@ Phase1 = 16
 Phase2 = 20
 Phase3 = 24
 
-pygame.init()
-screen = pygame.display.set_mode(pad_size)
-clock = pygame.time.Clock()
-
 def main(param):
     screen=param['screen'];clock=param['clock'];wall=param['wall'];wall_width=param['wall_width'];wall_height=param['wall_height'];wall_1=param['wall_1']
     wall_2=param['wall_2'];wall_3=param['wall_3'];wall_4=param['wall_4'];wall_5=param['wall_5'];cat=param['cat'];cat_width=param['cat_width']
-    cat_height=param['cat_height'];background1=param['background1'];background2=param['background2'];font=param['font']
+    cat_height=param['cat_height'];background1=param['background1'];background2=param['background2'];font=param['font'];background3=param['background3'];bgm=param['bgm']
     chr_idx = 0
     max_chr_idx = 9
     phase = 1
@@ -90,7 +86,9 @@ def main(param):
     background_y = 0
     background1_x = 0
     background2_x =pad_size[0]
+    background3_x =pad_size[0]*2
     running = True
+    bgm.play()
     while running:
         seconds = (pygame.time.get_ticks()-start_ticks)/1000
         if seconds >= GameTime : #시작 3분 후 클리어
@@ -131,27 +129,18 @@ def main(param):
             speed = Phase1
         elif seconds<60:
             if not phase2_r:
-                regen_wall = False
-                print(regen_wall)
                 life += 1
                 phase2_r = True
-        elif seconds<65:
-            regen_wall = True
-            print(regen_wall)
-            speed = Phase2
+                speed = Phase2
         elif seconds<80:
             if not phase3_r:
-                regen_wall = False
-                print(regen_wall)
                 life += 2
                 phase3_r = True
-        elif seconds<82:
-            regen_wall=True
-            print(regen_wall)
-            speed = Phase3
+                speed = Phase3
             
-        background1_x-=16
-        background2_x-=16
+        background1_x-=speed
+        background2_x-=speed
+        background3_x-=speed
 
         wall_x-=speed
         wall_1_x-=speed
@@ -176,7 +165,6 @@ def main(param):
             life-=1
             wall_3_x=resetWalls(4)
             wall_3_y=resetWalls(7)
-    
         elif isCollision(x, y, cat_width, cat_height, wall_4_x, wall_4_y, wall_width, wall_height):
             life-=1
             wall_4_x=resetWalls(5)
@@ -187,7 +175,7 @@ def main(param):
             wall_5_y=resetWalls(9)
 
             
-        if regen_wall:    
+        if not(30 < seconds < 32) and not(60 < seconds < 62):    
             if wall_x+wall_width*0.8<=0:   
                 wall_x=resetWalls(1)
                 wall_y=resetWalls(7)
@@ -207,14 +195,16 @@ def main(param):
                 wall_5_x=resetWalls(6)
                 wall_5_y=resetWalls(9)
             
-        if background1_x ==-pad_size[0]:
-            background1_x=pad_size[0]
-
-        if background2_x == -pad_size[0]:
-            background2_x=pad_size[0]
+        if background1_x <=-pad_size[0]:
+            background1_x+=pad_size[0]*3
+        if background2_x <= -pad_size[0]:
+            background2_x+=pad_size[0]*3
+        if background3_x <= -pad_size[0]:
+            background3_x+=pad_size[0]*3
         screen.fill(WHITE)
         drawObject(background1, background1_x, background_y)
         drawObject(background2, background2_x, background_y)
+        drawObject(background3, background3_x, background_y)
         drawObject(wall,wall_x,wall_y)
         drawObject(wall_1,wall_1_x, wall_1_y)
         drawObject(wall_2,wall_2_x, wall_2_y)
@@ -242,13 +232,13 @@ def main(param):
         clock.tick(60)
         pygame.display.update()
 
-    pygame.quit()
     return isClear
 
 
 def init(screen, clock):
     DIR_PATH = os.path.abspath(os.path.dirname(__file__))
     DIR_IMAGE = os.path.join(DIR_PATH, 'images')
+    DIR_BGM = os.path.join(DIR_PATH,'bgms')
     player = pygame.image.load(os.path.join(DIR_IMAGE,"character.png"))
     spr=[]
     # spriteSheet_player = sprite.SpriteSheet(16,16,8,8,12)  width = 16, height = 16, max_row = 8, max_col = 8, max_index = 12
@@ -277,7 +267,9 @@ def init(screen, clock):
     background_width = background1.get_width()
     background_height = background1.get_height()
     background2 = background1.copy()
+    background3 = background1.copy()
+    bgm = pygame.mixer.Sound(os.path.join(DIR_BGM,"bgm.wav"))
     res = {'screen': screen,'clock':clock , 'wall':wall,'wall_width':wall_width,'wall_height':wall_height,'wall_1':wall_1,
     'wall_2':wall_2,'wall_3':wall_3,'wall_4':wall_4,'wall_5':wall_5,'cat':cat,'cat_width':cat_width,'cat_height':cat_height,'font':font,
-    'background1':background1,'background_width':background_width,'background_height':background_height,'background2':background2}
+    'background1':background1,'background_width':background_width,'background_height':background_height,'background2':background2, 'background3':background3, 'bgm':bgm}
     return res
