@@ -13,9 +13,6 @@ import src.event.script as script
 import src.engine.move as move
 import initial.init as initial
 
-pygame.init()
-screen = pygame.display.set_mode((WINDOW_SIZE))
-clock = pygame.time.Clock()
 
 def init(screen,clock):
     return initial.stage4_init(screen,clock)
@@ -165,8 +162,7 @@ def main(param):
         # 키 입력
         for event in pygame.event.get():
             if event.type == QUIT:
-                pygame.quit()
-                sys.exit()
+                return False
             if event.type == KEYDOWN:
                 #player1
                 if event.key == K_a:
@@ -239,5 +235,4 @@ def main(param):
 
         pygame.display.update()
         clock.tick(60)
-
-main(init(screen,clock))
+    return False
