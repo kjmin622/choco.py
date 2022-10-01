@@ -13,7 +13,7 @@ def stage2_main(param):
     screen=param['screen']; clock=param['clock']; vec=param['vec']; HEIGHT=param['HEIGHT']; WIDTH=param['WIDTH']; BORDER_RIGHT=param['BORDER_RIGHT']; BORDER_LEFT=param['BORDER_LEFT']; FPS=param['FPS']; ACC=param['ACC']; FRIC=param['FRIC']; GEN_LIMIT=param['GEN_LIMIT']; PLATFORM_GAP=param['PLATFORM_GAP']; PLATFORM_SIZE=param['PLATFORM_SIZE']; ARRIVE=param['ARRIVE']; STAGE_CLEAR=param['STAGE_CLEAR']; is_right=param['is_right']; is_left=param['is_left']; is_clear=param['is_clear']; start_time=param['start_time']; WHITE=param['WHITE']; BLACK=param['BLACK']; RED=param['RED']; GROUND_COLOR=param['GROUND_COLOR']; PLATFORM_COLOR=param['PLATFORM_COLOR']; DIR_PATH=param['DIR_PATH']; BG1_IMAGE=param['BG1_IMAGE']; BG2_IMAGE=param['BG2_IMAGE']; SPRITE_IMAGE=param['SPRITE_IMAGE']; JUMP_SOUND_PATH=param['JUMP_SOUND_PATH']; JUMP_SOUND=param['JUMP_SOUND']; FONT=param['FONT']
     
     main_font_30 = pygame.font.Font(FONT ,30)
-    main_font_50 = pygame.font.Font(FONT ,30)
+    main_font_50 = pygame.font.Font(FONT ,50)
 
     # 게임 백그라운드 이미지 로드
     bg1 = pygame.image.load(BG1_IMAGE)
@@ -189,6 +189,8 @@ def stage2_main(param):
             platforms.add(p)
             all_sprites.add(p)
 
+        
+
     
     # 발판과 플레이어 인스턴스화 후 세부값 설정        
     PT1 = Platform()
@@ -222,6 +224,7 @@ def stage2_main(param):
     while True:
         P1.update()
         for event in pygame.event.get():
+            print(event)
             P1.update()
             if event.type == QUIT:
                 pygame.quit()
@@ -236,6 +239,10 @@ def stage2_main(param):
                     is_left = True
                 if event.key == pygame.K_SPACE:
                     P1.jump()
+                if event.key == pygame.K_RETURN and ARRIVE == True:
+                    print("entered")
+                    return True
+
             if event.type == pygame.KEYUP:   
                 P1.update() 
                 if event.key == pygame.K_RIGHT:
@@ -265,7 +272,7 @@ def stage2_main(param):
                     plat.kill()
 
         # 목표지점 도달 시 도착 플레그 세우기
-        if P1.score >= 20:
+        if P1.score >= 5:
             ARRIVE = True
 
         # 맨 위로 올라갔을떄 화면 맨 아래로 이동
@@ -299,9 +306,11 @@ def stage2_main(param):
         screen.blit(bg, (0, 0))   
 
         if STAGE_CLEAR:
-            # f = pygame.font.SysFont("Verdana", 50)     
-            g  = main_font_50.render("Stage2 Clear", True, (123,255,0))   
-            screen.blit(g, (370, 200))  
+            g  = main_font_50.render("스테이지2 클리어", True, (255,255,255))   
+            screen.blit(g, (370, 160))
+
+            g  = main_font_30.render("엔터키를 눌러 다음 스테이지로 이동", True, (255,255,255))   
+            screen.blit(g, (370, 210))  
         
         for entity in all_sprites:
             screen.blit(entity.surf, entity.rect)
