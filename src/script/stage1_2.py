@@ -2,15 +2,17 @@ import os, sys, pygame
 from pygame.locals import *
 import pygame.mixer
 import script
-# trash code
-pygame.init()
-pygame.mixer.init()
-screen = pygame.display.set_mode((1024,768))
-clock = pygame.time.Clock()
+from constant import *
 
 def init(screen, clock):
-    scriptdata = script.script([["testbackground.png","testcharacter.png",["test1","test2","test3"]],
-                                ["testbackground.png","testcharacter2.png",["test4","test5","test6"]],
+    scriptdata = script.script([["testbackground.png",AGENT_T,["[요원 T]후... 저런 것들이 길을 막고 있다니...","[요원 T]하마터면 나도 큰일날 뻔 했어","[요원 T]여긴가... Q가 있는 곳은? 저기 흰 덩어리겠군"]],
+                                ["testbackground.png",AGENT_Q,["[요원 Q]T! 구하러 와줬구나!"]],
+                                ["testbackground.png",AGENT_T,["[요원 T]아니 나도 갇혔어"]],
+                                ["testbackground.png",AGENT_Q,["[요원 Q]??????????"]],
+                                ["testbackground.png",AGENT_T,["[요원 T]농담이고, 구조를 보니 탈출하기 쉽지 않을 거 같은데?"]],
+                                ["testbackground.png",AGENT_Q,["[요원 Q]둘러보니까 혼자서는 탈출 못하는 구조야. 서로 힘을 합쳐야 해"]],
+                                ["testbackground.png",AGENT_T,["[요원 T]너랑?","[요원 T]합을?","[요원 T]흠..."]],
+                                ["testbackground.png",AGENT_Q,["[요원 Q]빨리 와!"]],
                                 ])
     return {"screen":screen, "clock":clock, "scriptdata":scriptdata}
 
@@ -32,5 +34,3 @@ def main(param):
         screen.blit(scriptdata.get_draw_image(),(0,0))
         pygame.display.update()
         clock.tick(60)
-
-main(init(screen,clock))
