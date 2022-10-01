@@ -5,7 +5,7 @@ DIR_IMAGE = os.path.join(DIR_PATH, 'image')
 DIR_SOUND = os.path.join(DIR_PATH, 'sound')
 DIR_FONT = os.path.join(DIR_PATH, 'font')
 
-WINDOW_SIZE = (1080,720)
+WINDOW_SIZE = (1024,768)
 TILE_SIZE = 8
 
 TILE_MAPSIZE = (2000,500)
