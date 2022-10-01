@@ -11,10 +11,10 @@ class BlackScreen:
     def start(self, second):
         now = time()    
         while((time()-now)<second):
-            self.screen.fill((0,0,0))
             for event in pygame.event.get():
                 if event.type == QUIT:
                     return False
+            self.screen.fill((0,0,0))
             pygame.display.update()
             self.clock.tick(60)
         return True

@@ -18,8 +18,9 @@ def init(screen,clock):
     return initial.stage4_init(screen,clock)
 
 def main(param):
-    screen=param['screen'];clock=param['clock'];screen_scaled=param['screen_scaled'];spriteSheet_player=param['spriteSheet_player'];spriteSheet_player2=param['spriteSheet_player2'];spriteSheet_ground=param['spriteSheet_ground'];spriteSheet_object=param['spriteSheet_object'];spr_player=param['spr_player'];spr_player2=param['spr_player2'];mapManager=param['mapManager'];player_spawn_x=param['player_spawn_x'];player_spawn_y=param['player_spawn_y'];mapImage=param['mapImage'];endpoint_list=param['endpoint_list'];eventList=param['eventList'];scriptEventList=param['scriptEventList'];event_image=param['event_image'];keyLeft=param['keyLeft'];keyRight=param['keyRight'];keyLeft2=param['keyLeft2'];keyRight2=param['keyRight2'];player_sponOK=param['player_sponOK'];player2_sponOK=param['player2_sponOK'];camera_scroll=param['camera_scroll'];player_rect=param['player_rect'];player_movement=param['player_movement'];player_vspeed=param['player_vspeed'];player_flytime=param['player_flytime'];player2_rect=param['player2_rect'];player2_movement=param['player2_movement'];player2_vspeed=param['player2_vspeed'];player2_flytime=param['player2_flytime'];player_action=param['player_action'];player_frame=param['player_frame'];player_frameSpeed=param['player_frameSpeed'];player_frameTimer=param['player_frameTimer'];player_flip=param['player_flip'];player_animationMode=param['player_animationMode'];player_walkSoundToggle=param['player_walkSoundToggle'];player_walkSoundTimer=param['player_walkSoundTimer'];player2_action=param['player2_action'];player2_frame=param['player2_frame'];player2_frameSpeed=param['player2_frameSpeed'];player2_frameTimer=param['player2_frameTimer'];player2_flip=param['player2_flip'];player2_animationMode=param['player2_animationMode'];player2_walkSoundToggle=param['player2_walkSoundToggle'];player2_walkSoundTimer=param['player2_walkSoundTimer'];camera_scroll_standard=param['camera_scroll_standard']
+    screen=param['screen'];clock=param['clock'];screen_scaled=param['screen_scaled'];spriteSheet_player=param['spriteSheet_player'];spriteSheet_player2=param['spriteSheet_player2'];spriteSheet_ground=param['spriteSheet_ground'];spriteSheet_object=param['spriteSheet_object'];spr_player=param['spr_player'];spr_player2=param['spr_player2'];mapManager=param['mapManager'];player_spawn_x=param['player_spawn_x'];player_spawn_y=param['player_spawn_y'];mapImage=param['mapImage'];endpoint_list=param['endpoint_list'];eventList=param['eventList'];scriptEventList=param['scriptEventList'];event_image=param['event_image'];keyLeft=param['keyLeft'];keyRight=param['keyRight'];keyLeft2=param['keyLeft2'];keyRight2=param['keyRight2'];player_sponOK=param['player_sponOK'];player2_sponOK=param['player2_sponOK'];camera_scroll=param['camera_scroll'];player_rect=param['player_rect'];player_movement=param['player_movement'];player_vspeed=param['player_vspeed'];player_flytime=param['player_flytime'];player2_rect=param['player2_rect'];player2_movement=param['player2_movement'];player2_vspeed=param['player2_vspeed'];player2_flytime=param['player2_flytime'];player_action=param['player_action'];player_frame=param['player_frame'];player_frameSpeed=param['player_frameSpeed'];player_frameTimer=param['player_frameTimer'];player_flip=param['player_flip'];player_animationMode=param['player_animationMode'];player_walkSoundToggle=param['player_walkSoundToggle'];player_walkSoundTimer=param['player_walkSoundTimer'];player2_action=param['player2_action'];player2_frame=param['player2_frame'];player2_frameSpeed=param['player2_frameSpeed'];player2_frameTimer=param['player2_frameTimer'];player2_flip=param['player2_flip'];player2_animationMode=param['player2_animationMode'];player2_walkSoundToggle=param['player2_walkSoundToggle'];player2_walkSoundTimer=param['player2_walkSoundTimer'];camera_scroll_standard=param['camera_scroll_standard'];button_on_sound=param["button_on_sound"];button_off_sound=param["button_off_sound"];jump_sound=param["jump_sound"];jump_sound2=param["jump_sound2"];back_music=param["back_music"]
     
+    back_music.play(-1)
     while True:
         screen_scaled.fill(BACKGROUND_COLOR)
         
@@ -147,8 +148,11 @@ def main(param):
         for event in eventList:        
             nowFlag = event.perceive(player_rect, player2_rect)
             if(nowFlag):
+                if(event.classname == "Button"):
+                    button_on_sound.play()
                 eventFlag = True
                 event_image = event.event_image(event_image)
+
         event_image.set_colorkey((0,0,0))
         screen_scaled.blit(event_image,(-camera_scroll[0], -camera_scroll[1]))
         if(eventFlag):
@@ -157,6 +161,7 @@ def main(param):
         # 게임이 끝났는가?
         for event in endpoint_list:
             if event.colliderect(player_rect) or event.colliderect(player2_rect):
+                back_music.stop()
                 return True
 
         # 키 입력
@@ -175,6 +180,7 @@ def main(param):
                     player_frame, player_action, player_frameSpeed,player_animationMode = sprite.change_player_action(
                         player_frame, player_action, "jump", player_frameSpeed, 6, player_animationMode, False
                     )
+                    jump_sound.play()
                 #player2
                 if event.key == K_LEFT:
                     keyLeft2 = True
@@ -186,6 +192,7 @@ def main(param):
                     player2_frame, player2_action, player2_frameSpeed,player2_animationMode = sprite.change_player_action(
                         player2_frame, player2_action, "jump", player2_frameSpeed, 6, player2_animationMode, False
                     )
+                    jump_sound2.play()
 
                 #public
                 if event.key == K_q:
@@ -235,4 +242,5 @@ def main(param):
 
         pygame.display.update()
         clock.tick(60)
+    back_music.stop()
     return False

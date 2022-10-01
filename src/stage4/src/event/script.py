@@ -36,6 +36,7 @@ class ScriptEvent:
         self.sprite = sprite
         self.scriptText = ScriptText(text)
         self.imageinit = False
+        self.classname = "ScriptEvent"
     
     def event_image(self,image):
         if not self.imageinit:
