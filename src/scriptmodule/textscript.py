@@ -2,6 +2,7 @@ import os, sys, pygame
 from pygame.locals import *
 import pygame.mixer
 from scriptmodule.constant import *
+from time import time
 
 class Script:
     # screen_list = [[image_path, character_image_path, [script, ...]], ...]
@@ -10,6 +11,7 @@ class Script:
         self.now = [0,0]
         self.gamefont = pygame.font.Font(os.path.join(DIR_FONT, DEFAULT_FONT_NAME),33)
         self.namefont = pygame.font.Font(os.path.join(DIR_FONT, DEFAULT_FONT_NAME),33, bold=True)
+        self.recent_time = time()
     
     def split_name_text(self, text):
         if(text[0] == '['):
@@ -46,10 +48,13 @@ class Script:
         return image
 
     def next(self):
-        self.now[1] += 1
-        if self.now[1] >= len(self.screen_list[self.now[0]][2]):
-            self.now[1] = 0
-            self.now[0] += 1
-            if self.now[0] >= len(self.screen_list):
-                return False
+        if(time()-self.recent_time > 0.5):
+            self.recent_time = time()
+            self.now[1] += 1
+            if self.now[1] >= len(self.screen_list[self.now[0]][2]):
+                self.now[1] = 0
+                self.now[0] += 1
+                if self.now[0] >= len(self.screen_list):
+                    return False
+            return True
         return True
