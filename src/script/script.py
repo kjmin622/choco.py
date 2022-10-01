@@ -9,7 +9,7 @@ class script:
         self.screen_list = [[os.path.join(DIR_IMAGE, image_path),os.path.join(DIR_IMAGE, character_image_path),script_list]  for image_path, character_image_path, script_list in screen_list]
         self.now = [0,0]
         self.gamefont = pygame.font.Font(os.path.join(DIR_FONT, DEFAULT_FONT_NAME),33)
-        self.namefont = pygame.font.Font(os.path.join(DIR_FONT, DEFAULT_FONT_NAME),37, bold=True)
+        self.namefont = pygame.font.Font(os.path.join(DIR_FONT, DEFAULT_FONT_NAME),33, bold=True)
     
     def split_name_text(self, text):
         if(text[0] == '['):
@@ -24,16 +24,18 @@ class script:
         character = pygame.image.load(self.screen_list[self.now[0]][1])
         character.set_colorkey((255,255,255))
         textbox = pygame.image.load(os.path.join(DIR_IMAGE, "scriptbox.png"))
-        textbox.set_colorkey((255,255,255))
+        textbox.set_colorkey((0,0,0))
         fulltext = self.split_name_text(self.screen_list[self.now[0]][2][self.now[1]])
         name = fulltext[0]
-        name_surface = self.namefont.render(name,False,(0,0,0))
+        if(name==""):
+            textbox = pygame.image.load(os.path.join(DIR_IMAGE, "scriptbox2.png"))
+        name_surface = self.namefont.render(name,False,(225,225,225))
         name_rect = name_surface.get_rect()
-        name_rect.midtop = (round(WINDOW_SIZE[0]/9),round(WINDOW_SIZE[1]-200))
+        name_rect.midtop = (round(WINDOW_SIZE[0]/5),round(WINDOW_SIZE[1]-280))
         text = fulltext[1]
         text_surface = self.gamefont.render(text,False,(50,50,50))
         text_rect = text_surface.get_rect()
-        text_rect.midtop = (round(WINDOW_SIZE[0]/2),round(WINDOW_SIZE[1]-115))
+        text_rect.midtop = (round(WINDOW_SIZE[0]/2),round(WINDOW_SIZE[1]-135))
         
         image.blit(background,(0,0))
         image.blit(character,(0,0))
