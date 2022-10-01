@@ -25,6 +25,7 @@ class Button:
         self.startfunc = startfunc
         self.endfunc = endfunc
         self.status = False
+        self.classname = "Button"
     
     def event_image(self,image):
         if(self.status):

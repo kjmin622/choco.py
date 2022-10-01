@@ -16,6 +16,8 @@ from mainUI import ui
 
 pygame.init()
 pygame.mixer.init()
+pygame.display.set_caption("catSPY")
+pygame.display.set_icon(pygame.image.load(os.path.join(os.path.dirname(os.path.abspath(__file__)),"gameicon.png")))
 clock = pygame.time.Clock()
 screen = pygame.display.set_mode((1024,768),0,32)
 
