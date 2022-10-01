@@ -1,8 +1,5 @@
 import random, pygame, time
 import sys
-import io
-sys.stdout = io.TextIOWrapper(sys.stdout.detach(), encoding = 'utf-8')
-sys.stderr = io.TextIOWrapper(sys.stderr.detach(), encoding = 'utf-8')
 
 
 WHITE = (255,255,255)
@@ -229,7 +226,3 @@ def initGame():
     background_width = background1.get_width()
     background_height = background1.get_height()
     background2 = background1.copy()
-    runGame()
-
-
-initGame()

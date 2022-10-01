@@ -76,6 +76,7 @@ def runGame():
         seconds = (pygame.time.get_ticks()-start_ticks)/1000
         if seconds >= GameTime : #시작 3분 후 클리어
             running = False
+            return True
         
         if life==0:
 
@@ -199,7 +200,7 @@ def runGame():
     pygame.quit()
 
 
-def initGame():
+def init():
     global gamepad, clock, cat, cat_width, cat_height, font, wall, wall_1,wall_2, wall_3, wall_4, wall_5, wall_width, wall_height
     global background1, background2, background_width, background_height
     pygame.init()
@@ -226,5 +227,4 @@ def initGame():
     background2 = background1.copy()
     runGame()
 
-
-initGame()
+init()
