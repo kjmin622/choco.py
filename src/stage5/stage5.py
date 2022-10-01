@@ -99,6 +99,7 @@ def main(param):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
+                isClear = None
 
             if event.type == pygame.KEYDOWN:
                 if event.key==pygame.K_w:
@@ -127,12 +128,12 @@ def main(param):
 
         if seconds <30:
             speed = Phase1
-        elif seconds<60:
+        elif seconds<63:
             if not phase2_r:
                 life += 1
                 phase2_r = True
                 speed = Phase2
-        elif seconds<80:
+        elif seconds<83:
             if not phase3_r:
                 life += 2
                 phase3_r = True
