@@ -1,34 +1,34 @@
-import random, pygame, time
-from this import d
-import sys
+import random, pygame, time, os
 
 
 WHITE = (255,255,255)
 YELLOW = (255,255,0)
 pad_size = (1024,768)
 GameTime = 90
-Pase1 = 16
-Pase2 = 20
-Pase3 = 24
+Phase1 = 16
+Phase2 = 20
+Phase3 = 24
 
 pygame.init()
 screen = pygame.display.set_mode(pad_size)
 clock = pygame.time.Clock()
 
 def main(param):
-    screen=param['screen'];clock=param['clock'];wall=param['wall'];wall_width=param['wall_width'];wall_height=['wall_height'];wall_1=param['wall_1']
+    screen=param['screen'];clock=param['clock'];wall=param['wall'];wall_width=param['wall_width'];wall_height=param['wall_height'];wall_1=param['wall_1']
     wall_2=param['wall_2'];wall_3=param['wall_3'];wall_4=param['wall_4'];wall_5=param['wall_5'];cat=param['cat'];cat_width=param['cat_width']
     cat_height=param['cat_height'];background1=param['background1'];background2=param['background2'];font=param['font']
+    chr_idx = 0
+    max_chr_idx = 9
+    phase = 1
+    devide_idx = 3
+    regen_wall = True
+
     def drawObject(obj, x, y):
         screen.blit(obj, (x, y))
-
-    def drawMessage(msg):
-        text=font.render(msg, True, YELLOW)
-        screen.blit(text, (512,384))
-
-    def drawScore(x, y):
-        text=font.render("%s, %s"%(x, y), True, WHITE)
-        screen.blit(text, (724,10))
+    
+    def drawCharacter(obj, x, y):
+        obj.set_colorkey((0,0,0))
+        screen.blit(obj, (x, y))
 
     def drawTime(time):
         time = GameTime-time
@@ -60,13 +60,13 @@ def main(param):
         elif x==6:
             return random.randrange(pad_size[0]*2, pad_size[0]*2+700)
         elif x==7:
-            return random.randrange(0,pad_size[1]-wall_height)
+            return random.randrange(275, pad_size[1])
         elif x==8:
-            return random.randrange(0,wall_height)
+            return random.randrange(275, pad_size[1]-wall_height)
         elif x==9:
-            return random.randrange(pad_size[1]-wall_height*4,pad_size[1]-wall_height)
-    pase2_r = False
-    pase3_r = False
+            return random.randrange(pad_size[1]-wall_height, pad_size[1])
+    phase2_r = False
+    phase3_r = False
     isClear = False
     life = 3
     speed = 16
@@ -122,37 +122,33 @@ def main(param):
         elif x<pad_size[0]-cat_width and x_change>0:
             x+=x_change
             
-        if y>0 and y_change<0:
+        if y>275 and y_change<0:
             y+=y_change
         elif y<pad_size[1]-cat_height and y_change>0:
             y+=y_change
 
         if seconds <30:
-            speed = Pase1
+            speed = Phase1
         elif seconds<60:
-            if not pase2_r:
+            if not phase2_r:
+                regen_wall = False
+                print(regen_wall)
                 life += 1
-                reset_x = pad_size[0]*2
-                wall_x += reset_x
-                wall_1_x += reset_x 
-                wall_2_x += reset_x 
-                wall_3_x += reset_x  
-                wall_4_x+= reset_x  
-                wall_5_x+= reset_x 
-                speed = Pase2
-                pase2_r = True
-        else:
-            if not pase3_r:
+                phase2_r = True
+        elif seconds<65:
+            regen_wall = True
+            print(regen_wall)
+            speed = Phase2
+        elif seconds<80:
+            if not phase3_r:
+                regen_wall = False
+                print(regen_wall)
                 life += 2
-                reset_x = pad_size[0]*3
-                wall_x += reset_x 
-                wall_1_x += reset_x 
-                wall_2_x += reset_x 
-                wall_3_x += reset_x  
-                wall_4_x+= reset_x  
-                wall_5_x+= reset_x 
-                speed = Pase3
-                pase3_r = True
+                phase3_r = True
+        elif seconds<82:
+            regen_wall=True
+            print(regen_wall)
+            speed = Phase3
             
         background1_x-=16
         background2_x-=16
@@ -191,25 +187,25 @@ def main(param):
             wall_5_y=resetWalls(9)
 
             
-            
-        if wall_x+wall_width*0.8<=0:
-            wall_x=resetWalls(1)
-            wall_y=resetWalls(7)
-        if wall_1_x+wall_width*0.8<=0:
-            wall_1_x=resetWalls(2)
-            wall_1_y=resetWalls(7)
-        if wall_2_x+wall_width*0.8<=0:
-            wall_2_x=resetWalls(3)
-            wall_2_y=resetWalls(7)
-        if wall_3_x+wall_width*0.8<=0:
-            wall_3_x=resetWalls(4)
-            wall_3_y=resetWalls(7)
-        if wall_4_x+wall_width*0.8<=0:
-            wall_4_x=resetWalls(5)
-            wall_4_y=resetWalls(8)
-        if wall_5_x+wall_width*0.8<=0:
-            wall_5_x=resetWalls(6)
-            wall_5_y=resetWalls(9)
+        if regen_wall:    
+            if wall_x+wall_width*0.8<=0:   
+                wall_x=resetWalls(1)
+                wall_y=resetWalls(7)
+            if wall_1_x+wall_width*0.8<=0:
+                wall_1_x=resetWalls(2)
+                wall_1_y=resetWalls(7)
+            if wall_2_x+wall_width*0.8<=0:
+                wall_2_x=resetWalls(3)
+                wall_2_y=resetWalls(7)
+            if wall_3_x+wall_width*0.8<=0:
+                wall_3_x=resetWalls(4)
+                wall_3_y=resetWalls(7)
+            if wall_4_x+wall_width*0.8<=0:
+                wall_4_x=resetWalls(5)
+                wall_4_y=resetWalls(8)
+            if wall_5_x+wall_width*0.8<=0:
+                wall_5_x=resetWalls(6)
+                wall_5_y=resetWalls(9)
             
         if background1_x ==-pad_size[0]:
             background1_x=pad_size[0]
@@ -225,7 +221,19 @@ def main(param):
         drawObject(wall_3,wall_3_x, wall_3_y)
         drawObject(wall_4,wall_4_x, wall_4_y)
         drawObject(wall_5,wall_5_x, wall_5_y)
-        drawObject(cat, x, y)
+
+        if(speed == 20 and phase==1): 
+            chr_idx = 0
+            devide_idx = 2
+            phase = 2
+        if(speed == 24 and phase==2): 
+            chr_idx = 0
+            devide_idx = 1
+            phase = 3
+
+        drawCharacter(cat[chr_idx//devide_idx], x, y)
+        chr_idx += 1
+        if(chr_idx == max_chr_idx*devide_idx): chr_idx = 0
         drawTime(seconds)
         drawLife(life)
         if life==0:
@@ -239,10 +247,20 @@ def main(param):
 
 
 def init(screen, clock):
-    screen = pygame.display.set_mode((pad_size[0],pad_size[1]))
-    pygame.display.set_caption('Stage 5')
-    wall = pygame.image.load("images/wall.png")
-    wall = pygame.transform.rotozoom(wall,0,0.1)
+    DIR_PATH = os.path.abspath(os.path.dirname(__file__))
+    DIR_IMAGE = os.path.join(DIR_PATH, 'images')
+    player = pygame.image.load(os.path.join(DIR_IMAGE,"character.png"))
+    spr=[]
+    # spriteSheet_player = sprite.SpriteSheet(16,16,8,8,12)  width = 16, height = 16, max_row = 8, max_col = 8, max_index = 12
+    for i in range(12):
+        image = pygame.Surface((16, 16))
+        image.blit(player, (0, 0), ((i % 8) * 16, (i // 8) * 16, 16, 16))
+        img = pygame.transform.scale(image, (64, 64))
+        img.set_colorkey((0, 0, 0))
+        spr.append(img)
+    
+    wall = pygame.image.load(os.path.join(DIR_IMAGE,"wall.png"))
+    wall = pygame.transform.rotozoom(wall,0,0.08)
     wall_width = wall.get_width()
     wall_height = wall.get_height()
     wall_1= wall.copy()
@@ -250,12 +268,12 @@ def init(screen, clock):
     wall_3= wall.copy()
     wall_4= wall.copy()
     wall_5= wall.copy()
-    cat = pygame.image.load("images/cat.png")
-    cat = pygame.transform.rotozoom(cat,0,0.1)
-    cat_width = cat.get_width()
-    cat_height = cat.get_height()
+    cat = spr#pygame.image.load("images/cat.png")
+    #cat = pygame.transform.rotozoom(cat,0,1)
+    cat_width = cat[0].get_width()
+    cat_height = cat[0].get_height()
     font = pygame.font.Font(None,  30)
-    background1 = pygame.image.load("images/background.png")
+    background1 = pygame.image.load(os.path.join(DIR_IMAGE,"background.png"))
     background_width = background1.get_width()
     background_height = background1.get_height()
     background2 = background1.copy()
