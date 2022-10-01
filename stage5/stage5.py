@@ -1,4 +1,5 @@
 import random, pygame, time
+from this import d
 import sys
 
 
@@ -6,7 +7,7 @@ WHITE = (255,255,255)
 YELLOW = (255,255,0)
 pad_width = 1024
 pad_height = 768
-GameTime = 180
+GameTime = 90
 Pase1 = 16
 Pase2 = 20
 Pase3 = 24
@@ -15,7 +16,7 @@ def drawObject(obj, x, y):
     gamepad.blit(obj, (x, y))
 
 def drawMessage(msg):
-    text=font.render("%s"%(msg), True, YELLOW)
+    text=font.render(msg, True, YELLOW)
     gamepad.blit(text, (512,384))
 
 def drawScore(x, y):
@@ -34,39 +35,54 @@ def isCollision(x1, y1, width1, height1, x2, y2, width2, height2):
         return False
 
 def drawLife(x):
-    if(x==1):
-        text=font.render("1",True,WHITE)
-        gamepad.blit(text,(1000,10))
-    elif(x==2):
-        text=font.render("2",True,WHITE)
-        gamepad.blit(text,(1000,10))
-    else:
-        text=font.render("3",True,WHITE)
-        gamepad.blit(text,(1000,10))
+    text=font.render("%d"%(x),True,WHITE)
+    gamepad.blit(text,(1000,10))
     
     
-    
+def resetWalls(x):
+    if x==1:
+        return random.randrange(pad_width*2, pad_width*2+400)
+    elif x==2:
+        return random.randrange(pad_width*2, pad_width*2+400)
+    elif x==3:
+        return random.randrange(pad_width*2, pad_width*2+200)
+    elif x==4:
+        return random.randrange(pad_width*2, pad_width*2+200)
+    elif x==5:
+        return random.randrange(pad_width*2, pad_width*2+700)
+    elif x==6:
+        return random.randrange(pad_width*2, pad_width*2+700)
+    elif x==7:
+        return random.randrange(0,pad_height-wall_height)
+    elif x==8:
+        return random.randrange(0,wall_height)
+    elif x==9:
+        return random.randrange(pad_height-wall_height*4,pad_height-wall_height)
+
 
 
 def runGame():
     global gamepad, clock, speed, life
+    pase2_r = False
+    pase3_r = False
+    isClear = False
     life = 3
     speed = 16
     start_ticks = pygame.time.get_ticks()
     x=pad_width*0.05  
     y=pad_height*0.8
-    wall_x = random.randrange(pad_width, pad_width+400)
-    wall_1_x=random.randrange(pad_width, pad_width+400)
-    wall_2_x=random.randrange(pad_width, pad_width+200)
-    wall_3_x=random.randrange(pad_width, pad_width+200)
-    wall_4_x=random.randrange(pad_width, pad_width+700)
-    wall_5_x=random.randrange(pad_width, pad_width+700)
-    wall_y = random.randrange(0,pad_height-wall_height)
-    wall_1_y = random.randrange(0,pad_height-wall_height)
-    wall_2_y = random.randrange(0,pad_height-wall_height)
-    wall_3_y = random.randrange(0,pad_height-wall_height)
-    wall_4_y = random.randrange(0,wall_height)
-    wall_5_y = random.randrange(pad_height-wall_height*4,pad_height-wall_height)
+    wall_x = resetWalls(1)
+    wall_1_x = resetWalls(2)
+    wall_2_x = resetWalls(3)
+    wall_3_x = resetWalls(4)
+    wall_4_x = resetWalls(5)
+    wall_5_x= resetWalls(6)
+    wall_y = resetWalls(7)
+    wall_1_y = resetWalls(7)
+    wall_2_y = resetWalls(7)
+    wall_3_y = resetWalls(7)
+    wall_4_y = resetWalls(8)
+    wall_5_y = resetWalls(9)
     x_change = 0
     y_change = 0
     background_y = 0
@@ -76,11 +92,8 @@ def runGame():
     while running:
         seconds = (pygame.time.get_ticks()-start_ticks)/1000
         if seconds >= GameTime : #시작 3분 후 클리어
+            isClear = True
             running = False
-        
-        if life==0:
-            time.sleep(1)
-            pygame.quit()
 
 
         for event in pygame.event.get():
@@ -112,14 +125,32 @@ def runGame():
         elif y<pad_height-cat_height and y_change>0:
             y+=y_change
 
-        if seconds <60:
+        if seconds <30:
             speed = Pase1
-
-        elif seconds<120:
-            speed = Pase2
-
+        elif seconds<60:
+            if not pase2_r:
+                life = 3
+                reset_x = pad_width*2
+                wall_x += reset_x
+                wall_1_x += reset_x 
+                wall_2_x += reset_x 
+                wall_3_x += reset_x  
+                wall_4_x+= reset_x  
+                wall_5_x+= reset_x 
+                speed = Pase2
+                pase2_r = True
         else:
-            speed = Pase3
+            if not pase3_r:
+                life = 3
+                reset_x = pad_width*3
+                wall_x += reset_x 
+                wall_1_x += reset_x 
+                wall_2_x += reset_x 
+                wall_3_x += reset_x  
+                wall_4_x+= reset_x  
+                wall_5_x+= reset_x 
+                speed = Pase3
+                pase3_r = True
             
         background1_x-=16
         background2_x-=16
@@ -133,50 +164,50 @@ def runGame():
 
         if isCollision(x, y, cat_width, cat_height, wall_x, wall_y, wall_width, wall_height):
             life-=1
-            wall_x=random.randrange(pad_width, pad_width+200)
-            wall_y=random.randrange(0,pad_height-wall_height)
+            wall_x=resetWalls(1)
+            wall_y=resetWalls(7)
         elif isCollision(x, y, cat_width, cat_height, wall_1_x, wall_1_y, wall_width, wall_height):
             life-=1
-            wall_1_x=random.randrange(pad_width, pad_width+400)
-            wall_1_y=random.randrange(0,pad_height-wall_height)
+            wall_1_x=resetWalls(2)
+            wall_1_y=resetWalls(7)
         elif isCollision(x, y, cat_width, cat_height, wall_2_x, wall_2_y, wall_width, wall_height):
             life-=1
-            wall_2_x=random.randrange(pad_width, pad_width+200)
-            wall_2_y=random.randrange(0,pad_height-wall_height)
+            wall_2_x=resetWalls(3)
+            wall_2_y=resetWalls(7)
         elif isCollision(x, y, cat_width, cat_height, wall_3_x, wall_3_y, wall_width, wall_height):
             life-=1
-            wall_3_x=random.randrange(pad_width, pad_width+400)
-            wall_3_y=random.randrange(0,pad_height-wall_height)
+            wall_3_x=resetWalls(4)
+            wall_3_y=resetWalls(7)
     
         elif isCollision(x, y, cat_width, cat_height, wall_4_x, wall_4_y, wall_width, wall_height):
             life-=1
-            wall_4_x=random.randrange(pad_width, pad_width+600)
-            wall_4_y=random.randrange(0,wall_height*2)
+            wall_4_x=resetWalls(5)
+            wall_4_y=resetWalls(8)
         elif isCollision(x, y, cat_width, cat_height, wall_5_x, wall_5_y, wall_width, wall_height):
             life-=1
-            wall_5_x=random.randrange(pad_width, pad_width+600)
-            wall_5_y=random.randrange(pad_height-(wall_height*2),pad_height-wall_height)
+            wall_5_x=resetWalls(6)
+            wall_5_y=resetWalls(9)
 
             
             
         if wall_x+wall_width*0.8<=0:
-            wall_x=random.randrange(pad_width, pad_width+200)
-            wall_y=random.randrange(0,pad_height-wall_height)
+            wall_x=resetWalls(1)
+            wall_y=resetWalls(7)
         if wall_1_x+wall_width*0.8<=0:
-            wall_1_x=random.randrange(pad_width, pad_width+400)
-            wall_1_y=random.randrange(0,pad_height-wall_height)
+            wall_1_x=resetWalls(2)
+            wall_1_y=resetWalls(7)
         if wall_2_x+wall_width*0.8<=0:
-            wall_2_x=random.randrange(pad_width, pad_width+200)
-            wall_2_y=random.randrange(0,pad_height-wall_height)
+            wall_2_x=resetWalls(3)
+            wall_2_y=resetWalls(7)
         if wall_3_x+wall_width*0.8<=0:
-            wall_3_x=random.randrange(pad_width, pad_width+400)
-            wall_3_y=random.randrange(0,pad_height-wall_height)
+            wall_3_x=resetWalls(4)
+            wall_3_y=resetWalls(7)
         if wall_4_x+wall_width*0.8<=0:
-            wall_4_x=random.randrange(pad_width, pad_width+600)
-            wall_4_y=random.randrange(0,wall_height*2)
+            wall_4_x=resetWalls(5)
+            wall_4_y=resetWalls(8)
         if wall_5_x+wall_width*0.8<=0:
-            wall_5_x=random.randrange(pad_width, pad_width+600)
-            wall_5_y=random.randrange(pad_height-(wall_height*2),pad_height-wall_height)
+            wall_5_x=resetWalls(6)
+            wall_5_y=resetWalls(9)
             
         if background1_x ==-pad_width:
             background1_x=pad_width
@@ -195,10 +226,14 @@ def runGame():
         drawObject(cat, x, y)
         drawTime(seconds)
         drawLife(life)
-        pygame.display.update()
+        if life==0:
+            time.sleep(3)
+            running = False
         clock.tick(60)
+        pygame.display.update()
 
     pygame.quit()
+    return isClear
 
 
 def initGame():
@@ -226,3 +261,6 @@ def initGame():
     background_width = background1.get_width()
     background_height = background1.get_height()
     background2 = background1.copy()
+    runGame()
+
+initGame()
