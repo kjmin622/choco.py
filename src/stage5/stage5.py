@@ -92,12 +92,14 @@ def main(param):
     while running:
         seconds = (pygame.time.get_ticks()-start_ticks)/1000
         if seconds >= GameTime : #시작 3분 후 클리어
+            bgm.stop()
             isClear = True
             running = False
 
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
+                bgm.stop()
                 running = False
                 isClear = None
 
@@ -228,7 +230,8 @@ def main(param):
         drawTime(seconds)
         drawLife(life)
         if life==0:
-            time.sleep(3)
+            bgm.stop()
+            time.sleep(1.5)
             running = False
         clock.tick(60)
         pygame.display.update()
