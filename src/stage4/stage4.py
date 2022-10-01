@@ -13,9 +13,6 @@ import src.event.script as script
 import src.engine.move as move
 import initial.init as initial
 
-pygame.init()
-screen = pygame.display.set_mode((WINDOW_SIZE))
-clock = pygame.time.Clock()
 
 def init(screen,clock):
     return initial.stage4_init(screen,clock)
@@ -239,5 +236,3 @@ def main(param):
 
         pygame.display.update()
         clock.tick(60)
-
-main(init(screen,clock))
