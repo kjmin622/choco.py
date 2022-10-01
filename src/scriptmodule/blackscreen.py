@@ -17,3 +17,4 @@ class BlackScreen:
                     return False
             pygame.display.update()
             self.clock.tick(60)
+        return True

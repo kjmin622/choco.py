@@ -1,6 +1,6 @@
 
 import pygame,os,sys
-from constant import *
+from scriptmodule.constant import *
 class ScreenScript:
     #script_list : [[image, [(script,(x,y)) ... ]], ...]
     def __init__(self, script_list):

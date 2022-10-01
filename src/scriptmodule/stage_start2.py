@@ -1,11 +1,11 @@
 import os, sys, pygame
 from pygame.locals import *
 import pygame.mixer
-import script
-from constant import *
+import scriptmodule.textscript as textscript
+from scriptmodule.constant import *
 
 def init(screen, clock):
-    scriptdata = script.script([["testbackground.png",AGENT_C,["[요원 C]이번 임무에 투입된 요원 Q와의 연락이 방금 끊어졌다","[요원 C]무슨 일이 생긴 것 같으니 즉시 현장으로 출동하도록."]],
+    scriptdata = textscript.Script([["testbackground.png",AGENT_C,["[요원 C]이번 임무에 투입된 요원 Q와의 연락이 방금 끊어졌다","[요원 C]무슨 일이 생긴 것 같으니 즉시 현장으로 출동하도록."]],
                                 ["testbackground.png",AGENT_T,["[요원 T]흠... 이 시간대면 도로를 지나가는 것이 최단 루트겠군","[요원 T]본부에 의하면... '공사중'...? 이게 뭐지?"]],
                                 ])
     return {"screen":screen, "clock":clock, "scriptdata":scriptdata}
