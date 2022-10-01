@@ -1,8 +1,8 @@
 import os, sys, pygame
 from pygame.locals import *
 import pygame.mixer
-import screen_script
-from constant import *
+import scriptmodule.screen_script as screen_script
+from scriptmodule.constant import *
 
 def init(screen, clock):
     scriptdata = screen_script.ScreenScript([["testbackground2.png",[("비상 출입구랍시고 만들어 놓은 저 막돼먹은 곳을",(WINDOW_SIZE[0]/2, WINDOW_SIZE[1]/2-150)),

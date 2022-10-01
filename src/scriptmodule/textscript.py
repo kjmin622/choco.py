@@ -1,9 +1,9 @@
 import os, sys, pygame
 from pygame.locals import *
 import pygame.mixer
-from constant import *
+from scriptmodule.constant import *
 
-class script:
+class Script:
     # screen_list = [[image_path, character_image_path, [script, ...]], ...]
     def __init__(self, screen_list): 
         self.screen_list = [[os.path.join(DIR_IMAGE, image_path),os.path.join(DIR_IMAGE, character_image_path),script_list]  for image_path, character_image_path, script_list in screen_list]
