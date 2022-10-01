@@ -1,6 +1,8 @@
 
 import pygame,os,sys
 from scriptmodule.constant import *
+from time import time
+
 class ScreenScript:
     #script_list : [[image, [(script,(x,y)) ... ]], ...]
     def __init__(self, script_list):
@@ -8,6 +10,7 @@ class ScreenScript:
         self.now = [0,0]
         self.gamefont = pygame.font.Font(os.path.join(DIR_FONT, DEFAULT_FONT_NAME),END_FONT_1)
         self.highlightfont = pygame.font.Font(os.path.join(DIR_FONT, DEFAULT_FONT_NAME),END_FONT_2)
+        self.recent_time = time()
     
     def get_draw_image(self):
         image = pygame.Surface(WINDOW_SIZE)
@@ -29,10 +32,13 @@ class ScreenScript:
         return image
     
     def next(self):
-        self.now[1] += 1
-        if self.now[1] >= len(self.script_list[self.now[0]][1]):
-            self.now[1] = 0
-            self.now[0] += 1
-            if self.now[0] >= len(self.script_list):
-                return False
+        if(time()-self.recent_time > 0.7):
+            self.recent_time = time()
+            self.now[1] += 1
+            if self.now[1] >= len(self.script_list[self.now[0]][1]):
+                self.now[1] = 0
+                self.now[0] += 1
+                if self.now[0] >= len(self.script_list):
+                    return False
+            return True
         return True
