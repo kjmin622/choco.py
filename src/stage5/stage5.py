@@ -12,7 +12,7 @@ Phase3 = 24
 def main(param):
     screen=param['screen'];clock=param['clock'];wall=param['wall'];wall_width=param['wall_width'];wall_height=param['wall_height'];wall_1=param['wall_1']
     wall_2=param['wall_2'];wall_3=param['wall_3'];wall_4=param['wall_4'];wall_5=param['wall_5'];cat=param['cat'];cat_width=param['cat_width']
-    cat_height=param['cat_height'];background1=param['background1'];background2=param['background2'];font=param['font'];background3=param['background3'];bgm=param['bgm']
+    cat_height=param['cat_height'];background1=param['background1'];background2=param['background2'];font=param['font'];background3=param['background3'];bgm=param['bgm'];collision_sound = param['collision_sound']
     chr_idx = 0
     max_chr_idx = 9
     phase = 1
@@ -153,26 +153,32 @@ def main(param):
         wall_5_x-=speed
 
         if isCollision(x, y, cat_width, cat_height, wall_x, wall_y, wall_width, wall_height):
+            collision_sound.play()
             life-=1
             wall_x=resetWalls(1)
             wall_y=resetWalls(7)
         elif isCollision(x, y, cat_width, cat_height, wall_1_x, wall_1_y, wall_width, wall_height):
+            collision_sound.play()
             life-=1
             wall_1_x=resetWalls(2)
             wall_1_y=resetWalls(7)
         elif isCollision(x, y, cat_width, cat_height, wall_2_x, wall_2_y, wall_width, wall_height):
+            collision_sound.play()
             life-=1
             wall_2_x=resetWalls(3)
             wall_2_y=resetWalls(7)
         elif isCollision(x, y, cat_width, cat_height, wall_3_x, wall_3_y, wall_width, wall_height):
+            collision_sound.play()
             life-=1
             wall_3_x=resetWalls(4)
             wall_3_y=resetWalls(7)
         elif isCollision(x, y, cat_width, cat_height, wall_4_x, wall_4_y, wall_width, wall_height):
+            collision_sound.play()
             life-=1
             wall_4_x=resetWalls(5)
             wall_4_y=resetWalls(8)
         elif isCollision(x, y, cat_width, cat_height, wall_5_x, wall_5_y, wall_width, wall_height):
+            collision_sound.play()
             life-=1
             wall_5_x=resetWalls(6)
             wall_5_y=resetWalls(9)
@@ -262,8 +268,7 @@ def init(screen, clock):
     wall_3= wall.copy()
     wall_4= wall.copy()
     wall_5= wall.copy()
-    cat = spr#pygame.image.load("images/cat.png")
-    #cat = pygame.transform.rotozoom(cat,0,1)
+    cat = spr
     cat_width = cat[0].get_width()
     cat_height = cat[0].get_height()
     font = pygame.font.Font(None,  30)
@@ -273,7 +278,8 @@ def init(screen, clock):
     background2 = background1.copy()
     background3 = background1.copy()
     bgm = pygame.mixer.Sound(os.path.join(DIR_BGM,"bgm.wav"))
+    collision_sound = pygame.mixer.Sound(os.path.join(DIR_BGM,"collision.wav"))
     res = {'screen': screen,'clock':clock , 'wall':wall,'wall_width':wall_width,'wall_height':wall_height,'wall_1':wall_1,
     'wall_2':wall_2,'wall_3':wall_3,'wall_4':wall_4,'wall_5':wall_5,'cat':cat,'cat_width':cat_width,'cat_height':cat_height,'font':font,
-    'background1':background1,'background_width':background_width,'background_height':background_height,'background2':background2, 'background3':background3, 'bgm':bgm}
+    'background1':background1,'background_width':background_width,'background_height':background_height,'background2':background2, 'background3':background3, 'bgm':bgm, 'collision_sound' : collision_sound}
     return res
