@@ -62,10 +62,11 @@ def main():
         #     # 스크립트 보여주고 첫번째 스테이지 실행, 그 과정에서 게임 종료되는 상황 있으면 exit 시키고, 게임 잘 끝냈으면 첫번째 스테이지 클리어 정보 저장
             result = False
             while(result is not True):
-                record_save_file("1") if (stage_start1.main(stage_start1.init(screen,clock)) and blackscreen.start(1.5) and stage_start2.main(stage_start2.init(screen,clock)) and blackscreen.start(1)) else sys.exit()
+                emptyfunc() if (stage_start1.main(stage_start1.init(screen,clock)) and blackscreen.start(1.5) and stage_start2.main(stage_start2.init(screen,clock)) and blackscreen.start(1)) else sys.exit()
                 result = s5.main(s5.init(screen,clock))
                 if(result == None): sys.exit()
                 blackscreen.start(1)
+            record_save_file("1")
 
         if(start_stage <= 1):
             # 스크립트 보여주고 두번째 스테이지 실행, 그 과정에서 게임 종료되는 상황 있으면 exit 시키고, 게임 잘 끝냈으면 두번째 스테이지 클리어 정보 저장
