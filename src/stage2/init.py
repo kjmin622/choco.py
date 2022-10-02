@@ -43,7 +43,7 @@ def stage2_init(screen, clock):
     BG2_IMAGE = os.path.join(DIR_PATH, "bg_image/bg2.jpg")
     SPRITE_IMAGE = os.path.join(DIR_PATH, "character")
     JUMP_SOUND_PATH = os.path.join(DIR_PATH, "sound/Jump.wav")
-    BG_SOUND_PATH = os.path.join(DIR_PATH, "sound/bg.mp3")
+    BG_SOUND_PATH = os.path.join(DIR_PATH, "sound/BG.mp3")
 
     # 사운드
     JUMP_SOUND = pygame.mixer.Sound(JUMP_SOUND_PATH)
