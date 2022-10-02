@@ -39,16 +39,21 @@ def stage2_init(screen, clock):
 
     # 경로 모음
     DIR_PATH = os.path.dirname(__file__)
-    BG1_IMAGE = os.path.join(DIR_PATH, "bg_image/bg1.jpeg")
-    BG2_IMAGE = os.path.join(DIR_PATH, "bg_image/bg2.jpg")
+    DIR_SOUND = os.path.join(DIR_PATH, "sound")
+    DIR_FONT = os.path.join(DIR_PATH, "font")
+    DIR_IMAGE = os.path.join(DIR_PATH, "bg_image")
+    BG1_IMAGE = os.path.join(DIR_IMAGE, "bg1.jpeg")
+    BG2_IMAGE = os.path.join(DIR_IMAGE, "bg2.jpg")
     SPRITE_IMAGE = os.path.join(DIR_PATH, "character")
-    JUMP_SOUND_PATH = os.path.join(DIR_PATH, "sound/Jump.wav")
+    JUMP_SOUND_PATH = os.path.join(DIR_SOUND, "Jump.wav")
+    BG_SOUND_PATH = os.path.join(DIR_SOUND, "BG.mp3")
 
     # 사운드
     JUMP_SOUND = pygame.mixer.Sound(JUMP_SOUND_PATH)
+    BG_SOUND = pygame.mixer.Sound(BG_SOUND_PATH)
 
     #폰트
-    FONT = os.path.join(DIR_PATH, "font/Sunflower-Medium.ttf")
+    FONT = os.path.join(DIR_FONT, "Sunflower-Medium.ttf")
 
 
-    return {'screen':screen, 'clock':clock,'vec':vec, 'HEIGHT':HEIGHT, 'WIDTH':WIDTH, 'BORDER_RIGHT':BORDER_RIGHT, 'BORDER_LEFT':BORDER_LEFT, 'FPS':FPS, 'ACC':ACC, 'FRIC':FRIC, 'GEN_LIMIT':GEN_LIMIT, 'PLATFORM_GAP':PLATFORM_GAP, 'PLATFORM_SIZE':PLATFORM_SIZE, 'ARRIVE':ARRIVE, 'STAGE_CLEAR':STAGE_CLEAR, 'is_right':is_right, 'is_left':is_left, 'is_clear':is_clear, 'start_time':start_time, 'WHITE':WHITE, 'BLACK':BLACK, 'RED':RED, 'GROUND_COLOR':GROUND_COLOR, 'PLATFORM_COLOR':PLATFORM_COLOR, 'DIR_PATH':DIR_PATH, 'BG1_IMAGE':BG1_IMAGE, 'BG2_IMAGE':BG2_IMAGE, 'SPRITE_IMAGE':SPRITE_IMAGE, 'JUMP_SOUND_PATH':JUMP_SOUND_PATH, 'JUMP_SOUND':JUMP_SOUND, 'FONT':FONT}
+    return {'screen':screen, 'clock':clock,'vec':vec, 'HEIGHT':HEIGHT, 'WIDTH':WIDTH, 'BORDER_RIGHT':BORDER_RIGHT, 'BORDER_LEFT':BORDER_LEFT, 'FPS':FPS, 'ACC':ACC, 'FRIC':FRIC, 'GEN_LIMIT':GEN_LIMIT, 'PLATFORM_GAP':PLATFORM_GAP, 'PLATFORM_SIZE':PLATFORM_SIZE, 'ARRIVE':ARRIVE, 'STAGE_CLEAR':STAGE_CLEAR, 'is_right':is_right, 'is_left':is_left, 'is_clear':is_clear, 'start_time':start_time, 'WHITE':WHITE, 'BLACK':BLACK, 'RED':RED, 'GROUND_COLOR':GROUND_COLOR, 'PLATFORM_COLOR':PLATFORM_COLOR, 'DIR_PATH':DIR_PATH, 'BG1_IMAGE':BG1_IMAGE, 'BG2_IMAGE':BG2_IMAGE, 'SPRITE_IMAGE':SPRITE_IMAGE, 'JUMP_SOUND_PATH':JUMP_SOUND_PATH, 'JUMP_SOUND':JUMP_SOUND, 'FONT':FONT, 'BG_SOUND':BG_SOUND}
