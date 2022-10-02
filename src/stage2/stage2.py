@@ -10,18 +10,18 @@ def stage2_init(screen,clock):
     return init.stage2_init(screen,clock)
 
 def stage2_main(param):
-    screen=param['screen']; clock=param['clock']; vec=param['vec']; HEIGHT=param['HEIGHT']; WIDTH=param['WIDTH']; BORDER_RIGHT=param['BORDER_RIGHT']; BORDER_LEFT=param['BORDER_LEFT']; FPS=param['FPS']; ACC=param['ACC']; FRIC=param['FRIC']; GEN_LIMIT=param['GEN_LIMIT']; PLATFORM_GAP=param['PLATFORM_GAP']; PLATFORM_SIZE=param['PLATFORM_SIZE']; ARRIVE=param['ARRIVE']; STAGE_CLEAR=param['STAGE_CLEAR']; is_right=param['is_right']; is_left=param['is_left']; is_clear=param['is_clear']; start_time=param['start_time']; WHITE=param['WHITE']; BLACK=param['BLACK']; RED=param['RED']; GROUND_COLOR=param['GROUND_COLOR']; PLATFORM_COLOR=param['PLATFORM_COLOR']; DIR_PATH=param['DIR_PATH']; BG1_IMAGE=param['BG1_IMAGE']; BG2_IMAGE=param['BG2_IMAGE']; SPRITE_IMAGE=param['SPRITE_IMAGE']; JUMP_SOUND_PATH=param['JUMP_SOUND_PATH']; JUMP_SOUND=param['JUMP_SOUND']; FONT=param['FONT']
+    screen=param['screen']; clock=param['clock']; vec=param['vec']; HEIGHT=param['HEIGHT']; WIDTH=param['WIDTH']; BORDER_RIGHT=param['BORDER_RIGHT']; BORDER_LEFT=param['BORDER_LEFT']; FPS=param['FPS']; ACC=param['ACC']; FRIC=param['FRIC']; GEN_LIMIT=param['GEN_LIMIT']; PLATFORM_GAP=param['PLATFORM_GAP']; PLATFORM_SIZE=param['PLATFORM_SIZE']; ARRIVE=param['ARRIVE']; STAGE_CLEAR=param['STAGE_CLEAR']; is_right=param['is_right']; is_left=param['is_left']; is_clear=param['is_clear']; start_time=param['start_time']; WHITE=param['WHITE']; BLACK=param['BLACK']; RED=param['RED']; GROUND_COLOR=param['GROUND_COLOR']; PLATFORM_COLOR=param['PLATFORM_COLOR']; DIR_PATH=param['DIR_PATH']; BG1_IMAGE=param['BG1_IMAGE']; BG2_IMAGE=param['BG2_IMAGE']; SPRITE_IMAGE=param['SPRITE_IMAGE']; JUMP_SOUND_PATH=param['JUMP_SOUND_PATH']; JUMP_SOUND=param['JUMP_SOUND']; FONT=param['FONT']; BG_SOUND=param['BG_SOUND']
     
     main_font_30 = pygame.font.Font(FONT ,30)
     main_font_50 = pygame.font.Font(FONT ,50)
+
+    BG_SOUND.play(-1)
 
     # 게임 백그라운드 이미지 로드
     bg1 = pygame.image.load(BG1_IMAGE)
     bg2 = pygame.image.load(BG2_IMAGE)
 
     bg = bg1
-
-    pygame.display.set_caption("Game")
 
     # 게임 스프라이트 시트를 게임 내부에서 사용할 수 있도록 자르는 클래스
     class SpriteSheet:
@@ -224,7 +224,6 @@ def stage2_main(param):
     while True:
         P1.update()
         for event in pygame.event.get():
-            print(event)
             P1.update()
             if event.type == QUIT:
                 pygame.quit()
@@ -240,7 +239,6 @@ def stage2_main(param):
                 if event.key == pygame.K_SPACE:
                     P1.jump()
                 if event.key == pygame.K_RETURN and ARRIVE == True:
-                    print("entered")
                     return True
 
             if event.type == pygame.KEYUP:   
@@ -258,7 +256,9 @@ def stage2_main(param):
 
         # 화면 아래보다 내려가면 게임오버
         if P1.rect.top > HEIGHT:
+            BG_SOUND.stop()
             stage2_main(param)
+            return True
              
             
         P1.update()
@@ -272,7 +272,7 @@ def stage2_main(param):
                     plat.kill()
 
         # 목표지점 도달 시 도착 플레그 세우기
-        if P1.score >= 5:
+        if P1.score >= 20:
             ARRIVE = True
 
         # 맨 위로 올라갔을떄 화면 맨 아래로 이동
@@ -285,6 +285,7 @@ def stage2_main(param):
 
         # 플레이어가 목표지점 도착시 발판을 없애고, 도착 지점 발판을 생성함
         if P1.rect.top < 0 and ARRIVE == True:
+            BG_SOUND.stop()
             bg = bg2
             for plat in platforms:
                 plat.kill()
@@ -299,17 +300,17 @@ def stage2_main(param):
 
             
         if bg == bg2 and P1.vel[1] == 0:
-            STAGE_CLEAR = True 
+            STAGE_CLEAR = True
 
     
         # 발판, 점수, 캐릭터를 화면에 그리는 부분
         screen.blit(bg, (0, 0))   
 
         if STAGE_CLEAR:
-            g  = main_font_50.render("스테이지2 클리어", True, (255,255,255))   
-            screen.blit(g, (370, 160))
+            g  = main_font_50.render("클리어", True, (255,255,255))   
+            screen.blit(g, (370, 150))
 
-            g  = main_font_30.render("엔터키를 눌러 다음 스테이지로 이동", True, (255,255,255))   
+            g  = main_font_30.render("엔터키를 눌러 다음으로 이동", True, (255,255,255))   
             screen.blit(g, (370, 210))  
         
         for entity in all_sprites:
