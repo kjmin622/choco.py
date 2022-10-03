@@ -13,6 +13,7 @@ def main(param):
     screen=param['screen'];clock=param['clock'];wall=param['wall'];wall_width=param['wall_width'];wall_height=param['wall_height'];wall_1=param['wall_1']
     wall_2=param['wall_2'];wall_3=param['wall_3'];wall_4=param['wall_4'];wall_5=param['wall_5'];cat=param['cat'];cat_width=param['cat_width']
     cat_height=param['cat_height'];background1=param['background1'];background2=param['background2'];font=param['font'];background3=param['background3'];bgm=param['bgm'];collision_sound = param['collision_sound']
+    boost_sound=param['boost_sound']
     chr_idx = 0
     max_chr_idx = 9
     phase = 1
@@ -130,13 +131,15 @@ def main(param):
 
         if seconds <30:
             speed = Phase1
-        elif seconds<63:
+        elif seconds<60:
             if not phase2_r:
+                boost_sound.play()
                 life += 1
                 phase2_r = True
                 speed = Phase2
-        elif seconds<83:
+        elif seconds<80:
             if not phase3_r:
+                boost_sound.play()
                 life += 2
                 phase3_r = True
                 speed = Phase3
@@ -184,7 +187,7 @@ def main(param):
             wall_5_y=resetWalls(9)
 
             
-        if not(30 < seconds < 32) and not(60 < seconds < 62):    
+        if not(27 < seconds < 31) and not(57 < seconds < 61):    
             if wall_x+wall_width*0.8<=0:   
                 wall_x=resetWalls(1)
                 wall_y=resetWalls(7)
@@ -279,7 +282,8 @@ def init(screen, clock):
     background3 = background1.copy()
     bgm = pygame.mixer.Sound(os.path.join(DIR_BGM,"bgm.wav"))
     collision_sound = pygame.mixer.Sound(os.path.join(DIR_BGM,"collision.wav"))
+    boost_sound = pygame.mixer.Sound(os.path.join(DIR_BGM,"boost.wav"))
     res = {'screen': screen,'clock':clock , 'wall':wall,'wall_width':wall_width,'wall_height':wall_height,'wall_1':wall_1,
     'wall_2':wall_2,'wall_3':wall_3,'wall_4':wall_4,'wall_5':wall_5,'cat':cat,'cat_width':cat_width,'cat_height':cat_height,'font':font,
-    'background1':background1,'background_width':background_width,'background_height':background_height,'background2':background2, 'background3':background3, 'bgm':bgm, 'collision_sound' : collision_sound}
+    'background1':background1,'background_width':background_width,'background_height':background_height,'background2':background2, 'background3':background3, 'bgm':bgm, 'collision_sound' : collision_sound,'boost_sound':boost_sound}
     return res
