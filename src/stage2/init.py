@@ -2,6 +2,7 @@ import os
 import pygame
 
 def stage2_init(screen, clock):
+    # 게임에 공통적으로 쓰이는 클래스 가져오기
     screen = screen
     clock = clock
     vec = pygame.math.Vector2 #2 for two dimensional
@@ -21,19 +22,16 @@ def stage2_init(screen, clock):
     GEN_LIMIT = 7
     PLATFORM_GAP = 50
     PLATFORM_SIZE = 80
-    ARRIVE = False
-    STAGE_CLEAR = False
+    
 
     # 게임 내부 변수값
     is_right = False
     is_left = False
     is_clear = False
-    start_time = 0
+    is_arrive = False
+    is_stage_clear = False
 
     # 색깔 코드값
-    WHITE = (255, 255, 255)
-    BLACK = (0, 0, 0)
-    RED = (255, 0, 0)
     GROUND_COLOR = (147, 171, 248)
     PLATFORM_COLOR = (255, 255, 100)
 
@@ -54,6 +52,21 @@ def stage2_init(screen, clock):
 
     #폰트
     FONT = os.path.join(DIR_FONT, "Sunflower-Medium.ttf")
+    main_font_30 = pygame.font.Font(FONT ,30)
+    main_font_50 = pygame.font.Font(FONT ,50)
+    
+    # 게임 백그라운드 이미지 로드 및 기본 백그라운드 이미지 설정
+    bg1 = pygame.image.load(BG1_IMAGE)
+    bg2 = pygame.image.load(BG2_IMAGE)
+    bg = bg1
+
+    return {'screen':screen, 'clock':clock,'vec':vec, 'HEIGHT':HEIGHT, 'WIDTH':WIDTH, 'BORDER_RIGHT':BORDER_RIGHT, 'BORDER_LEFT':BORDER_LEFT, 'FPS':FPS, 'ACC':ACC, 
+    'FRIC':FRIC, 'GEN_LIMIT':GEN_LIMIT, 'PLATFORM_GAP':PLATFORM_GAP, 'PLATFORM_SIZE':PLATFORM_SIZE, 'is_arrive':is_arrive, 'is_stage_clear':is_stage_clear, 'is_right':is_right,
+    'is_left':is_left, 'is_clear':is_clear, 'GROUND_COLOR':GROUND_COLOR, 'PLATFORM_COLOR':PLATFORM_COLOR, 'DIR_PATH':DIR_PATH, 'BG1_IMAGE':BG1_IMAGE, 'BG2_IMAGE':BG2_IMAGE,
+    'SPRITE_IMAGE':SPRITE_IMAGE, 'JUMP_SOUND_PATH':JUMP_SOUND_PATH, 'JUMP_SOUND':JUMP_SOUND, 'FONT':FONT, 'BG_SOUND':BG_SOUND,
+    'main_font_30':main_font_30, 'main_font_50':main_font_50, 'bg1':bg1, 'bg2':bg2, 'bg':bg}
 
 
-    return {'screen':screen, 'clock':clock,'vec':vec, 'HEIGHT':HEIGHT, 'WIDTH':WIDTH, 'BORDER_RIGHT':BORDER_RIGHT, 'BORDER_LEFT':BORDER_LEFT, 'FPS':FPS, 'ACC':ACC, 'FRIC':FRIC, 'GEN_LIMIT':GEN_LIMIT, 'PLATFORM_GAP':PLATFORM_GAP, 'PLATFORM_SIZE':PLATFORM_SIZE, 'ARRIVE':ARRIVE, 'STAGE_CLEAR':STAGE_CLEAR, 'is_right':is_right, 'is_left':is_left, 'is_clear':is_clear, 'start_time':start_time, 'WHITE':WHITE, 'BLACK':BLACK, 'RED':RED, 'GROUND_COLOR':GROUND_COLOR, 'PLATFORM_COLOR':PLATFORM_COLOR, 'DIR_PATH':DIR_PATH, 'BG1_IMAGE':BG1_IMAGE, 'BG2_IMAGE':BG2_IMAGE, 'SPRITE_IMAGE':SPRITE_IMAGE, 'JUMP_SOUND_PATH':JUMP_SOUND_PATH, 'JUMP_SOUND':JUMP_SOUND, 'FONT':FONT, 'BG_SOUND':BG_SOUND}
+
+
+    
