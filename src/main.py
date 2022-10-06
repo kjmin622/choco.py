@@ -21,8 +21,8 @@ pygame.display.set_icon(pygame.image.load(os.path.join(os.path.dirname(os.path.a
 clock = pygame.time.Clock()
 screen = pygame.display.set_mode((1024,768),0,32)
 
-DIR_SAVE_FILE = os.path.join(os.path.abspath(os.path.dirname(__file__)), "game_data")
-SAVE_FILE = os.path.join(DIR_SAVE_FILE, "save")
+DIR_PATH = os.path.dirname(__file__)
+SAVE_FILE = os.path.join(DIR_PATH, "save")
 
 def road_save_file():
     if os.path.exists(SAVE_FILE):
