@@ -2,7 +2,6 @@ import random, pygame, time, os
 
 
 WHITE = (255,255,255)
-YELLOW = (255,255,0)
 pad_size = (1024,768)
 GameTime = 90
 Phase1 = 16
@@ -12,13 +11,13 @@ Phase3 = 24
 def main(param):
     screen=param['screen'];clock=param['clock'];wall=param['wall'];wall_width=param['wall_width'];wall_height=param['wall_height'];wall_1=param['wall_1']
     wall_2=param['wall_2'];wall_3=param['wall_3'];wall_4=param['wall_4'];wall_5=param['wall_5'];cat=param['cat'];cat_width=param['cat_width']
-    cat_height=param['cat_height'];background1=param['background1'];background2=param['background2'];font=param['font'];background3=param['background3'];bgm=param['bgm'];collision_sound = param['collision_sound']
+    cat_height=param['cat_height'];background1=param['background1'];background2=param['background2'];font=param['font'];background3=param['background3']
+    bgm=param['bgm'];collision_sound = param['collision_sound']
     boost_sound=param['boost_sound']
     chr_idx = 0
     max_chr_idx = 9
     phase = 1
     devide_idx = 3
-    regen_wall = True
 
     def drawObject(obj, x, y):
         screen.blit(obj, (x, y))
