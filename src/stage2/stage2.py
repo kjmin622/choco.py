@@ -10,10 +10,12 @@ def stage2_init(screen,clock):
 
 def stage2_main(param):
     # 스테이지에 필요한 초기 값들을 stage2_init을 통해 생성하고 딕셔너리 형태로 받음
-    screen=param['screen']; clock=param['clock']; vec=param['vec']; HEIGHT=param['HEIGHT']; WIDTH=param['WIDTH']; BORDER_RIGHT=param['BORDER_RIGHT']; BORDER_LEFT=param['BORDER_LEFT']; FPS=param['FPS']; ACC=param['ACC']; FRIC=param['FRIC']; GEN_LIMIT=param['GEN_LIMIT']; PLATFORM_GAP=param['PLATFORM_GAP']; PLATFORM_SIZE=param['PLATFORM_SIZE']; is_arrive=param['is_arrive']; is_stage_clear=param['is_stage_clear']; is_right=param['is_right']; is_left=param['is_left']; is_clear=param['is_clear']; GROUND_COLOR=param['GROUND_COLOR']; PLATFORM_COLOR=param['PLATFORM_COLOR']; DIR_PATH=param['DIR_PATH']; BG1_IMAGE=param['BG1_IMAGE']; BG2_IMAGE=param['BG2_IMAGE']; SPRITE_IMAGE=param['SPRITE_IMAGE']; JUMP_SOUND_PATH=param['JUMP_SOUND_PATH']; JUMP_SOUND=param['JUMP_SOUND']; FONT=param['FONT']; BG_SOUND=param['BG_SOUND']; main_font_30=param['main_font_30']; main_font_50=param['main_font_50']; bg1=param['bg1']; bg2=param['bg2']; bg=param['bg']
-
-    # 백그라운드 음악 재생
-    BG_SOUND.play(-1)
+    screen=param['screen']; clock=param['clock']; vec=param['vec']; HEIGHT=param['HEIGHT']; WIDTH=param['WIDTH']; 
+    BORDER_RIGHT=param['BORDER_RIGHT']; BORDER_LEFT=param['BORDER_LEFT']; FPS=param['FPS']; ACC=param['ACC']; FRIC=param['FRIC']; 
+    is_arrive=param['is_arrive']; is_stage_clear=param['is_stage_clear']; is_right=param['is_right']; is_left=param['is_left'];
+    GROUND_COLOR=param['GROUND_COLOR']; PLATFORM_COLOR=param['PLATFORM_COLOR']; SPRITE_IMAGE=param['SPRITE_IMAGE'];
+    JUMP_SOUND=param['JUMP_SOUND']; BG_SOUND=param['BG_SOUND']; 
+    main_font_30=param['main_font_30']; main_font_50=param['main_font_50']; bg2=param['bg2']; bg=param['bg']
 
     # 게임 스프라이트 시트를 게임 내부에서 사용할 수 있도록 자르는 클래스
     class SpriteSheet:
@@ -95,9 +97,9 @@ def stage2_main(param):
             
             # 캐릭터가 범위를 좌우 범위를 넘어갈때 처리
             if self.pos.x > WIDTH:
-                self.pos.x = 0
-            if self.pos.x < 0:
                 self.pos.x = WIDTH
+            if self.pos.x < 0:
+                self.pos.x = 0
                 
             self.rect.midbottom = self.pos
     
@@ -111,7 +113,7 @@ def stage2_main(param):
                 self.jumping = True
                 self.vel.y = -20
         
-        # 속도가 무한정 늘어나지 않도록 방지
+        # 빠르게 원래 상태로 돌아오기 위한 메서드
         def cancel_jump(self):
             if self.jumping:
                 if self.vel.y < -3:
@@ -163,7 +165,7 @@ def stage2_main(param):
             for entity in groupies:
                 if entity == Platform:
                     continue
-                if (abs(Platform.rect.top - entity.rect.bottom) < 50) and (abs(Platform.rect.bottom - entity.rect.top) < 50):
+                if (abs(Platform.rect.top - entity.rect.top) < 50):
                     return True
             C = False
 
@@ -182,7 +184,9 @@ def stage2_main(param):
             platforms.add(p)
             all_sprites.add(p)
 
-    
+    # 백그라운드 음악 재생
+    BG_SOUND.play(-1)
+
     # 발판과 플레이어 인스턴스화 후 세부값 설정        
     PT1 = Platform()
     P1 = Player()
@@ -213,14 +217,11 @@ def stage2_main(param):
     
     # 키보드 입력 부분 
     while True:
-        P1.update()
         for event in pygame.event.get():
-            P1.update()
             if event.type == QUIT:
                 pygame.quit()
                 sys.exit()
             if event.type == pygame.KEYDOWN:
-                P1.update()
                 if event.key == pygame.K_RIGHT:
                     is_right = True
                     is_left = False
@@ -233,7 +234,6 @@ def stage2_main(param):
                     return True
 
             if event.type == pygame.KEYUP:   
-                P1.update() 
                 if event.key == pygame.K_RIGHT:
                     is_right = False
                     is_left = False
@@ -243,7 +243,6 @@ def stage2_main(param):
                 if event.key == pygame.K_SPACE:
                     P1.cancel_jump()
 
-        P1.update()
 
         # 화면 아래보다 내려가면 게임오버
         if P1.rect.top > HEIGHT:
@@ -252,8 +251,6 @@ def stage2_main(param):
             return True
              
             
-        P1.update()
-    
         # 화면 움직임과 발판 회수
         if P1.rect.top <= HEIGHT / 2 and is_arrive != True:
             P1.pos.y += abs(P1.vel.y)
@@ -315,5 +312,11 @@ def stage2_main(param):
         # 화면에 업데이트된 것을 반영하는 부분
         pygame.display.update()
 
-        # 
+        # 화면 프레임 설정
         clock.tick(FPS)
+
+
+
+
+
+

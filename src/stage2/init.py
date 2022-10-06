@@ -18,12 +18,6 @@ def stage2_init(screen, clock):
     ACC = 0.6
     FRIC = -0.12
 
-    # 게임 내부 상수값
-    GEN_LIMIT = 7
-    PLATFORM_GAP = 50
-    PLATFORM_SIZE = 80
-    
-
     # 게임 내부 변수값
     is_right = False
     is_left = False
@@ -61,12 +55,10 @@ def stage2_init(screen, clock):
     bg = bg1
 
     return {'screen':screen, 'clock':clock,'vec':vec, 'HEIGHT':HEIGHT, 'WIDTH':WIDTH, 'BORDER_RIGHT':BORDER_RIGHT, 'BORDER_LEFT':BORDER_LEFT, 'FPS':FPS, 'ACC':ACC, 
-    'FRIC':FRIC, 'GEN_LIMIT':GEN_LIMIT, 'PLATFORM_GAP':PLATFORM_GAP, 'PLATFORM_SIZE':PLATFORM_SIZE, 'is_arrive':is_arrive, 'is_stage_clear':is_stage_clear, 'is_right':is_right,
-    'is_left':is_left, 'is_clear':is_clear, 'GROUND_COLOR':GROUND_COLOR, 'PLATFORM_COLOR':PLATFORM_COLOR, 'DIR_PATH':DIR_PATH, 'BG1_IMAGE':BG1_IMAGE, 'BG2_IMAGE':BG2_IMAGE,
-    'SPRITE_IMAGE':SPRITE_IMAGE, 'JUMP_SOUND_PATH':JUMP_SOUND_PATH, 'JUMP_SOUND':JUMP_SOUND, 'FONT':FONT, 'BG_SOUND':BG_SOUND,
-    'main_font_30':main_font_30, 'main_font_50':main_font_50, 'bg1':bg1, 'bg2':bg2, 'bg':bg}
+    'FRIC':FRIC, 'is_arrive':is_arrive, 'is_stage_clear':is_stage_clear, 'is_right':is_right,'is_left':is_left, 'is_clear':is_clear, 'GROUND_COLOR':GROUND_COLOR, 
+    'PLATFORM_COLOR':PLATFORM_COLOR, 'DIR_PATH':DIR_PATH, 'BG1_IMAGE':BG1_IMAGE, 'BG2_IMAGE':BG2_IMAGE, 'SPRITE_IMAGE':SPRITE_IMAGE, 'JUMP_SOUND':JUMP_SOUND, 
+    'FONT':FONT, 'BG_SOUND':BG_SOUND, 'main_font_30':main_font_30, 'main_font_50':main_font_50,'bg2':bg2, 'bg':bg}
 
 
 
 
-    
